@@ -1,0 +1,52 @@
+"use client";
+
+import { useSyncExternalStore } from "react";
+import { TypeAnimation } from "react-type-animation";
+
+const query = "(prefers-reduced-motion: reduce)";
+
+function subscribe(callback: () => void) {
+  const mql = window.matchMedia(query);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+function useReducedMotion() {
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
+}
+
+export function TypingRoles({ roles }: { roles: readonly string[] }) {
+  const reducedMotion = useReducedMotion();
+  // Type each role, hold it, then delete before the next one.
+  const sequence = roles.flatMap((role) => [role, 2200]);
+
+  return (
+    <p
+      aria-label={roles.join(", ")}
+      className="min-h-[1.2em] text-[clamp(1.6rem,4.2vw,3.25rem)] font-light leading-tight tracking-tight"
+    >
+      {reducedMotion ? (
+        <span aria-hidden>{roles[0]}</span>
+      ) : (
+        <TypeAnimation
+          aria-hidden
+          sequence={sequence}
+          wrapper="span"
+          speed={45}
+          deletionSpeed={65}
+          repeat={Infinity}
+          cursor={false}
+          preRenderFirstString
+        />
+      )}
+      <span
+        aria-hidden
+        className="cursor-block ml-1 inline-block h-[1em] w-[0.5em] align-[-0.12em] bg-foreground/45"
+      />
+    </p>
+  );
+}
