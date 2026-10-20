@@ -38,10 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
+      <body className="relative isolate min-h-full">
         <SymbioteBackground />
+        <div className="relative z-10 flex min-h-full flex-col">
+          <Navbar />
+          {children}
+        </div>
       </body>
     </html>
   );
