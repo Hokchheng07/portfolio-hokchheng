@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { TypeAnimation } from "react-type-animation";
+import { useIntroDone } from "@/components/layout/intro-loader";
 
 const query = "(prefers-reduced-motion: reduce)";
 
@@ -21,15 +22,17 @@ function useReducedMotion() {
 
 export function TypingRoles({ roles }: { roles: readonly string[] }) {
   const reducedMotion = useReducedMotion();
+  // Hold the first role still until the intro loader has lifted.
+  const introDone = useIntroDone();
   // Type each role, hold it, then delete before the next one.
   const sequence = roles.flatMap((role) => [role, 2200]);
 
   return (
     <p
       aria-label={roles.join(", ")}
-      className="min-h-[1.2em] text-[clamp(1.6rem,4.2vw,3.25rem)] font-light leading-tight tracking-tight"
+      className="min-h-[1.2em] text-[clamp(1.6rem,4.2vw,3.25rem)] xl:whitespace-nowrap xl:text-[clamp(2rem,2.5vw,2.75rem)] font-light leading-snug tracking-[0.005em]"
     >
-      {reducedMotion ? (
+      {reducedMotion || !introDone ? (
         <span aria-hidden>{roles[0]}</span>
       ) : (
         <TypeAnimation

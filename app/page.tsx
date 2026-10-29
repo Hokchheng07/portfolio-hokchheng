@@ -1,11 +1,18 @@
+import { AboutSection } from "@/components/about/about-section";
+import { EducationSection } from "@/components/education/education-section";
 import { Hero } from "@/components/hero/hero";
+import { StackSection } from "@/components/stack/stack-section";
+import { WorksSection } from "@/components/works/works-section";
 
 export default function Home() {
   return (
     <main className="flex-1">
       <Hero />
-      {/* Next sections (featured projects, skills, etc.) go here. */}
-      <section className="min-h-[50vh] bg-ink" />
+      <AboutSection />
+      <EducationSection />
+      <StackSection />
+      <WorksSection />
+      {/* Next sections (projects, contact, etc.) go here. */}
     </main>
   );
 }

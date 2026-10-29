@@ -14,7 +14,7 @@ export function PageShell({
       <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted">
         {eyebrow}
       </p>
-      <h1 className="mt-4 font-serif text-[clamp(3rem,7vw,6rem)] leading-none tracking-[-0.02em]">
+      <h1 className="mt-4 font-serif text-[clamp(3rem,7vw,6rem)] leading-[1.05] tracking-[0.01em]">
         {title}
       </h1>
       <div className="mt-10 text-muted">{children}</div>

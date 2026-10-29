@@ -1,0 +1,73 @@
+/*
+ * Ring geometry for the hero. --ring-r is the tile track radius, --ring-depth
+ * how far its arc reaches in from the page edge, --ring-gap the inset of the
+ * outer decorative arc. --ring-clear is the side room hero content keeps free.
+ */
+.orbit-hero {
+  --tile: 52px;
+  --ring-r: 520px;
+  --ring-depth: 90px;
+  --ring-gap: 84px;
+  --ring-clear: calc(var(--ring-depth) + var(--tile) / 2 + 2rem);
+}
+
+@media (min-width: 1280px) {
+  .orbit-hero {
+    --tile: 56px;
+    --ring-r: 620px;
+    --ring-depth: 120px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .orbit-hero {
+    --tile: 60px;
+    --ring-r: 700px;
+    --ring-depth: 150px;
+  }
+}
+
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  width: calc(var(--ring-r) * 2);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+}
+
+.orbit-ring[data-side="left"] {
+  left: calc(var(--ring-depth) - var(--ring-r) * 2);
+}
+
+.orbit-ring[data-side="right"] {
+  left: calc(100% - var(--ring-depth));
+}
+
+@keyframes orbit {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Both rings carry their tiles downward across the visible arc. */
+.orbit-spin {
+  animation: orbit 140s linear infinite;
+}
+
+.orbit-ring[data-side="right"] .orbit-spin {
+  animation-direction: reverse;
+}
+
+.orbit-tile {
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--ring-r));
+}
+
+.orbit-ring[data-side="right"] .orbit-tile {
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateX(calc(var(--ring-r) * -1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-spin {
+    animation: none;
+  }
+}

@@ -1,0 +1,7 @@
+/* Section links in the navbar glide to their target. Route changes stay
+   instant because <html> carries data-scroll-behavior="smooth". */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

@@ -1,0 +1,79 @@
+/* Photos cross-fade, the incoming one settling from a slight zoom. */
+.gallery-slide {
+  opacity: 0;
+  scale: 1.06;
+  transition:
+    opacity 0.9s ease,
+    scale 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-slide[data-active] {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Each photo's story fades in with its photo; the outgoing one fades away. */
+.story {
+  opacity: 0;
+  translate: 0 10px;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.5s;
+}
+
+.story[data-active] {
+  opacity: 1;
+  translate: none;
+  visibility: visible;
+  transition-delay: 0.15s, 0.15s, 0s;
+}
+
+@keyframes gallery-bar {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+.gallery-bar {
+  transform-origin: left;
+  scale: 0 1;
+}
+
+.gallery-bar[data-state="done"] {
+  scale: 1 1;
+}
+
+.gallery-bar[data-state="active"] {
+  animation: gallery-bar linear forwards;
+}
+
+/* Hovering the photo holds it. */
+.gallery-bar[data-paused] {
+  animation-play-state: paused;
+}
+
+/* The thumbnail strip fades out at its edges when it scrolls. */
+.thumb-strip {
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+  scroll-padding-inline: 24px;
+}
+
+.thumb-strip::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-slide {
+    scale: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  .story {
+    translate: none;
+  }
+}

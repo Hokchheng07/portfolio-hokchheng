@@ -1,0 +1,123 @@
+/* Intro loader. While <html data-intro="loading">, the page waits behind it. */
+html[data-intro="loading"] {
+  overflow: hidden;
+}
+
+html[data-intro="loading"] .rise {
+  animation-play-state: paused;
+}
+
+/* Name slides up out of its line, label fades in after. */
+@keyframes intro-name {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes intro-label {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+/* Safety net: if JS never runs, the loader still lifts on its own. */
+@keyframes intro-fallback {
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.intro-loader {
+  /* Soft vignette so the centre reads lighter than the edges. */
+  background-image: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    color-mix(in oklab, var(--foreground) 6%, transparent) 100%
+  );
+  animation: intro-fallback 0.4s ease 8s forwards;
+  transition:
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+.intro-name {
+  animation: intro-name 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.intro-label {
+  animation: intro-label 0.8s ease 0.45s both;
+}
+
+/* Bar creeps toward full while waiting; JS finishes it once the page is ready. */
+@keyframes intro-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(0.92);
+  }
+}
+
+@keyframes intro-bar-finish {
+  from {
+    transform: scaleX(var(--from, 0));
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.intro-bar {
+  transform: scaleX(0);
+  animation: intro-bar 2s cubic-bezier(0.45, 0, 0.4, 1) forwards;
+}
+
+.intro-loader:is([data-phase="ready"], [data-phase="exit"]) .intro-bar {
+  animation: intro-bar-finish 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+.intro-content {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Exit: loader blurs and fades while the page rises in underneath. */
+.intro-loader[data-phase="exit"] {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.intro-loader[data-phase="exit"] .intro-content {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-loader {
+    transition: opacity 0.3s ease;
+  }
+
+  .intro-loader[data-phase="exit"] {
+    filter: none;
+  }
+
+  .intro-loader[data-phase="exit"] .intro-content {
+    transform: none;
+  }
+
+  .intro-name,
+  .intro-label {
+    animation: none;
+  }
+
+  .intro-bar {
+    animation-duration: 0.6s;
+  }
+}

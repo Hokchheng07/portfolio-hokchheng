@@ -1,0 +1,77 @@
+/* Ported from Visora's src/theme/theme.css. */
+.theme-toggle {
+  transition:
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 180ms ease;
+}
+
+.theme-toggle:active {
+  transform: scale(0.97);
+}
+
+.theme-toggle-icons {
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
+.theme-toggle-icons svg {
+  position: absolute;
+  inset: 0;
+  width: 22px;
+  height: 22px;
+  opacity: 1;
+  transform: rotate(0deg);
+  transition:
+    opacity 180ms ease,
+    transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.theme-toggle-icons .theme-icon-hidden {
+  opacity: 0;
+  transform: rotate(-35deg);
+}
+
+/* View transition: the new theme sweeps in over the old one. */
+html[data-theme-transition]::view-transition {
+  pointer-events: none;
+}
+
+html[data-theme-transition="diagonal"]::view-transition-old(root),
+html[data-theme-transition="diagonal"]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-transition="diagonal"]::view-transition-group(root) {
+  animation-duration: 650ms;
+}
+
+html[data-theme-transition="diagonal"]::view-transition-new(root) {
+  z-index: 2;
+}
+
+html[data-theme-transition="diagonal"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-transition="fade"]::view-transition-group(*) {
+  animation-duration: 180ms;
+}
+
+/* Colour transitions (body background etc.) would smear the new snapshot. */
+html[data-theme-transition],
+html[data-theme-transition] * {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle,
+  .theme-toggle-icons svg {
+    transition: opacity 180ms ease;
+  }
+
+  .theme-toggle:active {
+    transform: none;
+  }
+}

@@ -1,0 +1,20 @@
+@keyframes marquee {
+  to {
+    translate: -50% 0;
+  }
+}
+
+.marquee-row {
+  animation: marquee 60s linear infinite;
+}
+
+.marquee-row[data-reverse] {
+  animation-direction: reverse;
+}
+
+/* Reduced motion: the rows stay put as a still texture. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-row {
+    animation: none;
+  }
+}

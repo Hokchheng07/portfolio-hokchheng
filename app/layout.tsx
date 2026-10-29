@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { SymbioteBackground } from "@/components/background/symbiote-background";
+import { IntroLoader } from "@/components/layout/intro-loader";
 import { Navbar } from "@/components/layout/navbar";
 import { themeScript } from "@/components/layout/theme-toggle";
 import { site } from "@/lib/site";
@@ -33,17 +34,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      data-intro="loading"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="relative isolate min-h-full">
+      <body className="min-h-full flex flex-col">
+        <Navbar />
+        {children}
         <SymbioteBackground />
-        <div className="relative z-10 flex min-h-full flex-col">
-          <Navbar />
-          {children}
-        </div>
+        <IntroLoader />
       </body>
     </html>
   );
