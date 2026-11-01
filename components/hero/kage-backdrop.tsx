@@ -19,6 +19,16 @@ const FADE = {
   maskImage: "linear-gradient(to bottom, #000 78%, transparent 100%)",
 };
 
+/*
+ * Settles once the scene has booted. Booting is heavy main-thread work, so the
+ * intro loader holds for it (when the page has a backdrop, marked data-kage):
+ * the katana strike then runs on a quiet thread and uncovers a finished scene.
+ */
+let markReady = () => {};
+export const kageReady = new Promise<void>((resolve) => {
+  markReady = resolve;
+});
+
 export function KageBackdrop() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -29,7 +39,7 @@ export function KageBackdrop() {
   useEffect(() => {
     const mount = () => setMounted(true);
     if (document.readyState === "complete") {
-      const id = window.setTimeout(mount, 300);
+      const id = window.setTimeout(mount, 0);
       return () => window.clearTimeout(id);
     }
     window.addEventListener("load", mount, { once: true });
@@ -44,7 +54,9 @@ export function KageBackdrop() {
 
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin || event.source !== frameRef.current?.contentWindow) return;
-      if (event.data?.kage === "ready") setReady(true);
+      if (event.data?.kage !== "ready") return;
+      setReady(true);
+      markReady();
     };
     // Normalised to -1..1, y up, as the scene's own cursor rig expects.
     const onMove = (event: PointerEvent) => {
@@ -69,7 +81,7 @@ export function KageBackdrop() {
   }, [mounted]);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden" style={FADE}>
+    <div ref={wrapRef} aria-hidden data-kage className="pointer-events-none absolute inset-0 -z-20 overflow-hidden" style={FADE}>
       {mounted && (
         <iframe
           ref={frameRef}

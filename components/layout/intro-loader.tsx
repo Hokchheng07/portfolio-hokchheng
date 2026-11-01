@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { kageReady } from "@/components/hero/kage-backdrop";
 import { site } from "@/lib/site";
+import { CUES, KatanaScene, LoaderCard } from "./katana-scene";
 import "./intro-loader.css";
 
-// Always shown for at least this long, so fast connections still get the intro.
-const MIN_MS = 2000;
-// Never held longer than this, even if some asset is still loading.
-const MAX_MS = 6000;
-const EXIT_MS = 700;
+// Never held longer than this, even if something is still loading.
+const MAX_MS = 8000;
+// The CSS hold: intro and bar run this long before Ready (see intro-loader.css).
+const HOLD_MS = 1760;
+// Once ready, the strike timeline starts here, giving the bar 0.3s to fill.
+const STRIKE_FROM = CUES.Ready - 0.3;
 
 /*
  * Intro state lives on <html data-intro="loading">. The attribute is in the
@@ -48,62 +51,90 @@ function pageReady() {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+type Size = { W: number; H: number };
+
+/*
+ * The katana intro. The loader card animates in CSS while the page loads (see
+ * LoaderCard), so it stays smooth however busy the main thread is. It holds
+ * until the page has loaded and, on a page with the temple backdrop, until the
+ * scene has booted; then the strike plays from a requestAnimationFrame
+ * timeline (see KatanaScene). The page is released when the halves start to
+ * part, so the hero rises in behind them, and the loader unmounts once they
+ * are off screen. Reduced motion skips the sword and crossfades instead.
+ */
 export function IntroLoader() {
-  const [phase, setPhase] = useState<"loading" | "ready" | "exit" | "gone">("loading");
-  const barRef = useRef<HTMLSpanElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState<Size | null>(null);
+  const [reduced, setReduced] = useState(false);
+  const [T, setT] = useState<number | null>(null);
+  const [released, setReleased] = useState(false);
+  const [gone, setGone] = useState(false);
+  // One card element, so the three copies never re-render during the strike.
+  const card = useMemo(() => <LoaderCard name={site.name} />, []);
 
   useEffect(() => {
     // Root layout persists across client navigation, so this runs once per
     // full page load.
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Counted from navigation start, not hydration, so slow JS does not stretch it.
-    const minMs = Math.max(0, (reduced ? 600 : MIN_MS) - performance.now());
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const release = prefersReduced ? CUES.Ready + 0.15 : CUES.Split;
+    const end = prefersReduced ? CUES.Ready + 0.6 : CUES.Done;
+    // The root's client box is exactly the area the fixed loader covers.
+    const measure = () => {
+      const root = document.documentElement;
+      setSize({ W: root.clientWidth, H: root.clientHeight });
+    };
     let cancelled = false;
+    let raf = requestAnimationFrame(() => {
+      setReduced(prefersReduced);
+      measure();
+    });
+    window.addEventListener("resize", measure);
 
-    Promise.race([Promise.all([pageReady(), wait(minMs)]), wait(MAX_MS)]).then(async () => {
+    const scene = document.querySelector("[data-kage]") ? kageReady : Promise.resolve();
+    Promise.race([Promise.all([pageReady(), scene, wait(HOLD_MS)]), wait(MAX_MS)]).then(() => {
       if (cancelled) return;
-      // The bar fills in CSS from first paint; finish it from wherever it is.
-      const bar = barRef.current;
-      if (bar) {
-        const scale = new DOMMatrix(getComputedStyle(bar).transform).a;
-        bar.style.setProperty("--from", String(scale));
-      }
-      setPhase("ready");
-      await wait(450);
-      if (cancelled) return;
-      setPhase("exit");
-      finishIntro();
-      await wait(reduced ? 300 : EXIT_MS);
-      if (!cancelled) setPhase("gone");
+      // The bar fills from wherever its CSS hold left it.
+      const bar = rootRef.current?.querySelector(".kl-fill");
+      if (bar) rootRef.current?.style.setProperty("--from", String(new DOMMatrix(getComputedStyle(bar).transform).a));
+      const start = performance.now();
+      let isReleased = false;
+      const tick = (now: number) => {
+        if (cancelled) return;
+        const t = STRIKE_FROM + (now - start) / 1000;
+        if (!isReleased && t >= release) {
+          isReleased = true;
+          finishIntro();
+          setReleased(true);
+        }
+        if (t >= end) {
+          setGone(true);
+          return;
+        }
+        setT(t);
+        raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
     });
 
     return () => {
       cancelled = true;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", measure);
     };
   }, []);
 
-  if (phase === "gone") return null;
+  if (gone) return null;
 
   return (
     <div
+      ref={rootRef}
       aria-hidden
-      data-phase={phase}
-      className="intro-loader fixed inset-0 z-[70] grid place-items-center bg-background text-foreground"
+      data-phase={T === null ? "hold" : "strike"}
+      className={`intro-loader fixed inset-0 z-[70] ${released ? "pointer-events-none" : ""}`}
+      // Once JS is drawing, the timeline owns the exit and the CSS safety net stands down.
+      style={size ? { animation: "none" } : { background: "#0a0a0a" }}
     >
-      <div className="intro-content flex flex-col items-center">
-        <p className="overflow-hidden pb-1 font-display text-[clamp(3rem,9vw,7rem)] font-bold uppercase leading-none tracking-[-0.01em]">
-          <span className="intro-name block">{site.name}.</span>
-        </p>
-        <p className="intro-label mt-5 font-mono text-xs uppercase tracking-[0.45em] text-muted sm:text-sm">
-          Portfolio loading
-        </p>
-        <span className="relative mt-8 block h-1 w-64 overflow-hidden rounded-full bg-foreground/10 sm:w-96">
-          <span
-            ref={barRef}
-            className="intro-bar absolute inset-0 origin-left bg-foreground"
-          />
-        </span>
-      </div>
+      {size && <KatanaScene T={T ?? 0} W={size.W} H={size.H} reduced={reduced} card={card} />}
     </div>
   );
 }

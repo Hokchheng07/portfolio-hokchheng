@@ -7,27 +7,6 @@ html[data-intro="loading"] .rise {
   animation-play-state: paused;
 }
 
-/* Name slides up out of its line, label fades in after. */
-@keyframes intro-name {
-  from {
-    transform: translateY(110%);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@keyframes intro-label {
-  from {
-    opacity: 0;
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    filter: none;
-  }
-}
-
 /* Safety net: if JS never runs, the loader still lifts on its own. */
 @keyframes intro-fallback {
   to {
@@ -37,87 +16,266 @@ html[data-intro="loading"] .rise {
 }
 
 .intro-loader {
-  /* Soft vignette so the centre reads lighter than the edges. */
-  background-image: radial-gradient(
-    ellipse at center,
-    transparent 30%,
-    color-mix(in oklab, var(--foreground) 6%, transparent) 100%
-  );
   animation: intro-fallback 0.4s ease 8s forwards;
-  transition:
-    opacity 0.7s ease,
-    filter 0.7s ease;
+  --settle: cubic-bezier(0.45, 0, 0.55, 1);
+  --leaf-scale: 1.6;
 }
 
-.intro-name {
-  animation: intro-name 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+/*
+ * The loader card (LoaderCard in katana-scene.tsx). Every animation here runs
+ * on transform or opacity only, so the compositor keeps it smooth while the
+ * main thread is busy loading the page. Timings follow the design's timeline:
+ * the hold is the 1.76s before Ready, and data-phase="strike" marks Ready.
+ */
+.kl-card {
+  overflow: hidden;
+  background: #0a0a0a;
 }
 
-.intro-label {
-  animation: intro-label 0.8s ease 0.45s both;
+/* Leaves: a slow straight drift, a sway with a tilt, and a steady spin. */
+@keyframes kl-drift {
+  to {
+    transform: translate(calc(var(--vx) * 60px), calc(var(--vy) * 60px));
+  }
 }
 
-/* Bar creeps toward full while waiting; JS finishes it once the page is ready. */
-@keyframes intro-bar {
+@keyframes kl-sway {
   from {
-    transform: scaleX(0);
+    transform: translateY(calc(var(--sw) * -1)) rotate(-18deg);
   }
   to {
-    transform: scaleX(0.92);
+    transform: translateY(var(--sw)) rotate(18deg);
   }
 }
 
-@keyframes intro-bar-finish {
+@keyframes kl-spin {
   from {
-    transform: scaleX(var(--from, 0));
+    transform: rotate(var(--r0));
+  }
+  to {
+    transform: rotate(calc(var(--r0) + var(--vr) * 60deg));
+  }
+}
+
+.kl-leaf {
+  position: absolute;
+  animation: kl-drift 60s linear both;
+}
+
+.kl-sway {
+  display: block;
+  /* Half of the design's sine period (2π / 0.9 s), back and forth. */
+  animation: kl-sway 3.49s ease-in-out infinite alternate;
+}
+
+.kl-spin {
+  display: block;
+  width: calc(var(--size) * var(--leaf-scale));
+  height: calc(var(--size) * var(--leaf-scale));
+  animation: kl-spin 60s linear both;
+}
+
+/* Text: rises and fades in, then dims a touch at Ready. */
+@keyframes kl-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes kl-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.kl-jp {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  translate: 0 -50%;
+  writing-mode: vertical-rl;
+  font-size: 15px;
+  letter-spacing: 0.7em;
+  color: #2c2c2c;
+  animation: kl-fade 0.55s var(--settle) 0.4s both;
+}
+
+.kl-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.kl-name {
+  font-weight: 700;
+  font-size: 128px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #f2f2f0;
+  animation: kl-in 0.55s var(--settle) 0.05s both;
+}
+
+.kl-dim-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kl-label {
+  margin-top: 22px;
+  padding-left: 0.42em;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: #707070;
+  animation: kl-fade 0.55s var(--settle) 0.18s both;
+}
+
+.kl-track {
+  margin-top: 22px;
+  width: 280px;
+  height: 2px;
+  border-radius: 2px;
+  background: #1f1f1f;
+  overflow: hidden;
+  animation: kl-fade 0.55s var(--settle) 0.25s both;
+}
+
+.kl-dim-name,
+.kl-dim-meta {
+  transition:
+    opacity 0.15s var(--settle) 0.3s,
+    transform 0.15s var(--settle) 0.3s;
+}
+
+.intro-loader[data-phase="strike"] .kl-dim-name {
+  opacity: 0.82;
+  transform: scale(0.985);
+}
+
+.intro-loader[data-phase="strike"] .kl-dim-meta {
+  opacity: 0.55;
+}
+
+/*
+ * Bar: eases forward in chunks with pauses while the page loads, reaching 81%
+ * at the end of the hold, then fills from wherever it is once ready.
+ */
+@keyframes kl-bar {
+  0%,
+  25% {
+    transform: scaleX(0);
+    animation-timing-function: var(--settle);
+  }
+  32% {
+    transform: scaleX(0.16);
+  }
+  39% {
+    transform: scaleX(0.16);
+    animation-timing-function: var(--settle);
+  }
+  50% {
+    transform: scaleX(0.38);
+  }
+  61% {
+    transform: scaleX(0.38);
+    animation-timing-function: var(--settle);
+  }
+  70% {
+    transform: scaleX(0.55);
+  }
+  80% {
+    transform: scaleX(0.55);
+    animation-timing-function: var(--settle);
+  }
+  100% {
+    transform: scaleX(0.81);
+  }
+}
+
+@keyframes kl-bar-finish {
+  from {
+    transform: scaleX(var(--from, 0.81));
   }
   to {
     transform: scaleX(1);
   }
 }
 
-.intro-bar {
-  transform: scaleX(0);
-  animation: intro-bar 2s cubic-bezier(0.45, 0, 0.4, 1) forwards;
+.kl-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: #ededeb;
+  transform-origin: left;
+  animation: kl-bar 1.76s linear both;
 }
 
-.intro-loader:is([data-phase="ready"], [data-phase="exit"]) .intro-bar {
-  animation: intro-bar-finish 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+.intro-loader[data-phase="strike"] .kl-fill {
+  animation: kl-bar-finish 0.3s var(--settle) both;
 }
 
-.intro-content {
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+/* Film grain: an oversized noise tile that jumps 24 times a second. */
+@keyframes kl-grain {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-73px, -151px); }
+  20% { transform: translate(-146px, -82px); }
+  30% { transform: translate(-19px, -13px); }
+  40% { transform: translate(-92px, -164px); }
+  50% { transform: translate(-165px, -95px); }
+  60% { transform: translate(-38px, -26px); }
+  70% { transform: translate(-111px, -177px); }
+  80% { transform: translate(-184px, -108px); }
+  90% { transform: translate(-57px, -39px); }
 }
 
-/* Exit: loader blurs and fades while the page rises in underneath. */
-.intro-loader[data-phase="exit"] {
-  opacity: 0;
-  filter: blur(10px);
+.kl-grain {
+  position: absolute;
+  inset: -220px;
+  opacity: 0.07;
+  pointer-events: none;
+  animation: kl-grain 0.42s steps(1) infinite;
 }
 
-.intro-loader[data-phase="exit"] .intro-content {
-  transform: scale(1.04);
+@media (max-width: 699px) {
+  .intro-loader {
+    --leaf-scale: 1.3;
+  }
+
+  .kl-jp {
+    right: 14px;
+    font-size: 12px;
+  }
+
+  .kl-name {
+    font-size: 50px;
+  }
+
+  .kl-label {
+    margin-top: 14px;
+    font-size: 10px;
+  }
+
+  .kl-track {
+    margin-top: 16px;
+    width: 180px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-loader {
-    transition: opacity 0.3s ease;
-  }
-
-  .intro-loader[data-phase="exit"] {
-    filter: none;
-  }
-
-  .intro-loader[data-phase="exit"] .intro-content {
-    transform: none;
-  }
-
-  .intro-name,
-  .intro-label {
+  .kl-leaf,
+  .kl-sway,
+  .kl-grain,
+  .kl-jp,
+  .kl-name,
+  .kl-label,
+  .kl-track {
     animation: none;
   }
 
-  .intro-bar {
-    animation-duration: 0.6s;
+  .kl-spin {
+    animation-play-state: paused;
   }
 }
