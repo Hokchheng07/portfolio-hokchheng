@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowRightIcon, DownloadIcon } from "@/components/icons";
 import { site } from "@/lib/site";
+import { KageBackdrop } from "./kage-backdrop";
 import { OrbitRings } from "./orbit-rings";
 import { ProfileCard } from "./profile-card";
 import { SocialLinks } from "./social-links";
@@ -9,9 +10,21 @@ import { TypingRoles } from "./typing-roles";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
+// The hero sits on the night temple scene in both themes, so it always takes
+// the dark theme's colours.
+const NIGHT = {
+  "--background": "#0a0a0a",
+  "--foreground": "#ededed",
+  "--muted": "#8a8a8a",
+  "--surface": "#161616",
+  "--ink": "#f2f2f2",
+  "--on-ink": "#0a0a0a",
+} as CSSProperties;
+
 export function Hero() {
   return (
-    <section id="home" className="orbit-hero relative flex min-h-svh flex-col overflow-hidden lg:min-h-[max(100svh,54rem)]">
+    <section id="home" style={NIGHT} className="orbit-hero relative flex min-h-svh flex-col overflow-hidden text-foreground lg:min-h-[max(100svh,54rem)]">
+      <KageBackdrop />
       <OrbitRings />
 
       {/* On lg+ the content keeps --ring-clear free on both sides for the rings. */}
