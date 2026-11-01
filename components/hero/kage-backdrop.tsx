@@ -1,15 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { DriftingLeaves } from "@/components/layout/katana-scene";
 
 const SCENE_URL = "/kage/scene.html";
+// A still of the scene framed for a tall screen, captured from it at 390x844.
+const POSTER_URL = "/kage/poster-portrait.webp";
+// Phones and tablets get the still instead of the live scene: the 3D boot is
+// slow there, costs about a megabyte, and the loader would wait on it.
+const POSTER_QUERY = "(hover: none), (max-width: 767px)";
+
+function subscribePoster(callback: () => void) {
+  const query = window.matchMedia(POSTER_QUERY);
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+
+const wantsPoster = () => window.matchMedia(POSTER_QUERY).matches;
+
+// Whether this page runs the live scene, so the intro loader should wait for it.
+export function hasLiveScene() {
+  return Boolean(document.querySelector("[data-kage]")) && !wantsPoster();
+}
 
 /*
  * The Kage temple scene (ThreeUI Community, MIT; see public/kage/LICENSE.txt)
  * behind the hero, with its page UI, scroll camera and wordmark removed.
  *
  * It runs in its own document, so its globals and render loop stay apart from
- * the site. The frame never takes input: pointer moves are forwarded for the
+ * the site. On phones and tablets a still of it stands in instead, covering the
+ * first screen with leaves drifting over it in CSS. The frame never takes input: pointer moves are forwarded for the
  * parallax, and rendering pauses whenever the hero is off screen. The scene
  * grades itself black and white with only the leaves left red (see inkAll in
  * scene.html), and a mask fades it out at the hero's foot. It loads after the
@@ -34,6 +55,11 @@ export function KageBackdrop() {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
+  const poster = useSyncExternalStore(
+    subscribePoster,
+    wantsPoster,
+    () => false,
+  );
 
   // Mount the frame once the page itself has finished loading.
   useEffect(() => {
@@ -47,13 +73,20 @@ export function KageBackdrop() {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return undefined;
+    if (!mounted || poster) return undefined;
     const wrap = wrapRef.current;
     const send = (message: Record<string, unknown>) =>
-      frameRef.current?.contentWindow?.postMessage(message, window.location.origin);
+      frameRef.current?.contentWindow?.postMessage(
+        message,
+        window.location.origin,
+      );
 
     const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== frameRef.current?.contentWindow) return;
+      if (
+        event.origin !== window.location.origin ||
+        event.source !== frameRef.current?.contentWindow
+      )
+        return;
       if (event.data?.kage !== "ready") return;
       setReady(true);
       markReady();
@@ -78,19 +111,42 @@ export function KageBackdrop() {
       window.removeEventListener("message", onMessage);
       window.removeEventListener("pointermove", onMove);
     };
-  }, [mounted]);
+  }, [mounted, poster]);
 
   return (
-    <div ref={wrapRef} aria-hidden data-kage className="pointer-events-none absolute inset-0 -z-20 overflow-hidden" style={FADE}>
-      {mounted && (
-        <iframe
-          ref={frameRef}
-          src={SCENE_URL}
-          title="Temple scene"
-          tabIndex={-1}
-          className="size-full border-0 transition-opacity duration-1000 ease-out"
-          style={{ opacity: ready ? 1 : 0 }}
-        />
+    <div
+      ref={wrapRef}
+      aria-hidden
+      data-kage
+      className="pointer-events-none absolute inset-0 -z-20 overflow-hidden"
+      style={FADE}
+    >
+      {poster ? (
+        <div className="absolute inset-0 bg-[#0a0a0a]">
+          <div className="absolute inset-x-0 top-0 h-svh [mask-image:linear-gradient(to_bottom,#000_70%,transparent)]">
+            <Image
+              src={POSTER_URL}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover object-top"
+            />
+            {/* Shade the text side, so the moon never washes out the copy. */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/70 via-[#0a0a0a]/25 to-transparent" />
+            <DriftingLeaves loop />
+          </div>
+        </div>
+      ) : (
+        mounted && (
+          <iframe
+            ref={frameRef}
+            src={SCENE_URL}
+            title="Temple scene"
+            tabIndex={-1}
+            className="size-full border-0 transition-opacity duration-1000 ease-out"
+            style={{ opacity: ready ? 1 : 0 }}
+          />
+        )
       )}
     </div>
   );

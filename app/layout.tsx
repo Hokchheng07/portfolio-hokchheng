@@ -26,9 +26,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Link previews use app/opengraph-image.jpg and app/twitter-image.jpg, made in
+// Figma ("Hokchheng Portfolio — Open Graph").
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s — ${site.name}` },
   description: site.description,
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: site.title,
+    title: site.title,
+    description: site.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

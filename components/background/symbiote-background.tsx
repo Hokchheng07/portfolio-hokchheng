@@ -5,6 +5,8 @@ import { BASE_FRAME_MS, type Speck, drawDust, fitDust, placeDust, stepDust } fro
 import { Symbiote } from "./symbiote";
 
 const DUST = { particleCount: 180, particleSize: 1.4, speed: 1 };
+// Phones and tablets get the dust only: no pointer to follow, and no room.
+const NO_SYMBIOTE = "(hover: none), (max-width: 767px)";
 /*
  * Site-wide dust field with a pointer-following symbiote.
  *
@@ -23,6 +25,8 @@ export function SymbioteBackground() {
 
     const specks: Speck[] = [];
     const symbiote = new Symbiote({ scale: 1, tentacles: 6 });
+    const noSymbiote = window.matchMedia(NO_SYMBIOTE);
+    let showSymbiote = !noSymbiote.matches;
     let width = 0;
     let height = 0;
     let placed = false;
@@ -96,11 +100,14 @@ export function SymbioteBackground() {
       previous = time;
 
       stepDust(specks, step, width, height, window.scrollY, DUST.speed);
-      symbiote.update(step, specks, width, height);
+      // Read every frame, so resizing across the breakpoint hides or shows it.
+      if (showSymbiote && noSymbiote.matches) symbiote.releaseAll();
+      showSymbiote = !noSymbiote.matches;
+      if (showSymbiote) symbiote.update(step, specks, width, height);
 
       ctx.clearRect(0, 0, width, height);
       drawDust(ctx, specks);
-      symbiote.draw(ctx, time);
+      if (showSymbiote) symbiote.draw(ctx, time);
     }
     frame = requestAnimationFrame(animate);
 

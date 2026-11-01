@@ -62,6 +62,11 @@ html[data-intro="loading"] .rise {
   animation: kl-drift 60s linear both;
 }
 
+.kl-leaves {
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .kl-sway {
   display: block;
   /* Half of the design's sine period (2π / 0.9 s), back and forth. */
@@ -73,6 +78,31 @@ html[data-intro="loading"] .rise {
   width: calc(var(--size) * var(--leaf-scale));
   height: calc(var(--size) * var(--leaf-scale));
   animation: kl-spin 60s linear both;
+}
+
+/* Backdrop leaves go round again, fading out and back in at each end. */
+@keyframes kl-drift-loop {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  8%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--vx) * 30px), calc(var(--vy) * 30px));
+    opacity: 0;
+  }
+}
+
+.kl-leaves--loop .kl-leaf {
+  animation: kl-drift-loop 30s linear var(--delay) infinite;
+}
+
+/* Spin on the same 30s cycle, so it wraps while the leaf is faded out. */
+.kl-leaves--loop .kl-spin {
+  animation: kl-spin 30s linear var(--delay) infinite;
 }
 
 /* Text: rises and fades in, then dims a touch at Ready. */
@@ -265,6 +295,7 @@ html[data-intro="loading"] .rise {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kl-leaves--loop .kl-leaf,
   .kl-leaf,
   .kl-sway,
   .kl-grain,

@@ -5,6 +5,8 @@ export const site = {
   fullName: "Hok Chheng",
   initials: "HC",
   title: "Hokchheng — Portfolio",
+  // Deployed address; makes the Open Graph image URL absolute for link previews.
+  url: "https://portfolio-hokchheng.vercel.app",
   description: "Personal portfolio and CV of Hokchheng.",
   location: "Phnom Penh · Cambodia",
   roles: ["Full-Stack Web Developer", "UI / UX Enthusiast", "Problem Solver"],

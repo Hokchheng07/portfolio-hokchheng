@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { kageReady } from "@/components/hero/kage-backdrop";
+import { hasLiveScene, kageReady } from "@/components/hero/kage-backdrop";
 import { site } from "@/lib/site";
 import { CUES, KatanaScene, LoaderCard } from "./katana-scene";
 import "./intro-loader.css";
@@ -90,7 +90,7 @@ export function IntroLoader() {
     });
     window.addEventListener("resize", measure);
 
-    const scene = document.querySelector("[data-kage]") ? kageReady : Promise.resolve();
+    const scene = hasLiveScene() ? kageReady : Promise.resolve();
     Promise.race([Promise.all([pageReady(), scene, wait(HOLD_MS)]), wait(MAX_MS)]).then(() => {
       if (cancelled) return;
       // The bar fills from wherever its CSS hold left it.

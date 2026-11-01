@@ -189,22 +189,32 @@ const NOISE =
 const fill: CSSProperties = { position: "absolute", inset: 0 };
 
 /*
- * The loader card: name, label and bar on black, with drifting leaves. All of
- * its motion is CSS (see intro-loader.css), on transforms and opacity, so it
- * stays smooth while the page and the hero scene load on the main thread. It
- * renders once; the loader shows three copies (whole, and the two halves), all
- * mounted together so their animations stay in step.
+ * Red maple leaves drifting, swaying and spinning, in CSS only (kl-* rules in
+ * intro-loader.css), so they stay smooth however busy the main thread is. The
+ * loader's leaves drift once; `loop` sends them round again, fading at each
+ * end, for backdrops that stay on screen.
  */
-export function LoaderCard({ name }: { name: string }) {
+export function DriftingLeaves({ loop = false }: { loop?: boolean }) {
   return (
-    <div className="kl-card" style={fill}>
+    <div className={loop ? "kl-leaves kl-leaves--loop" : "kl-leaves"} style={fill}>
       {LEAVES.map((l, i) => (
         <span
           key={i}
           className="kl-leaf"
-          style={{ left: `${l.x * 100}%`, top: `${l.y * 100}%`, opacity: l.o, "--vx": l.vx, "--vy": l.vy } as CSSProperties}
+          style={
+            {
+              left: `${l.x * 100}%`,
+              top: `${l.y * 100}%`,
+              "--vx": l.vx,
+              "--vy": l.vy,
+              "--delay": `${-i * 6}s`,
+            } as CSSProperties
+          }
         >
-          <span className="kl-sway" style={{ "--sw": `${l.sw}px`, animationDelay: `${-l.ph / 0.9}s` } as CSSProperties}>
+          <span
+            className="kl-sway"
+            style={{ opacity: l.o, "--sw": `${l.sw}px`, animationDelay: `${-l.ph / 0.9}s` } as CSSProperties}
+          >
             <svg
               className="kl-spin"
               viewBox="0 0 24 24"
@@ -222,6 +232,21 @@ export function LoaderCard({ name }: { name: string }) {
           </span>
         </span>
       ))}
+    </div>
+  );
+}
+
+/*
+ * The loader card: name, label and bar on black, with drifting leaves. All of
+ * its motion is CSS (see intro-loader.css), on transforms and opacity, so it
+ * stays smooth while the page and the hero scene load on the main thread. It
+ * renders once; the loader shows three copies (whole, and the two halves), all
+ * mounted together so their animations stay in step.
+ */
+export function LoaderCard({ name }: { name: string }) {
+  return (
+    <div className="kl-card" style={fill}>
+      <DriftingLeaves />
       <div className="kl-jp" style={{ fontFamily: SERIF_JP }}>
         ホクチェン
       </div>
