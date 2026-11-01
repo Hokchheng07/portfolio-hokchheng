@@ -33,7 +33,7 @@ export function ProfileCard() {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-serif text-[9rem] italic leading-none text-white/15">
+            <span className="font-display text-[9rem] italic leading-none text-white/15">
               {site.initials}
             </span>
           </div>

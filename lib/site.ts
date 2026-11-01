@@ -11,9 +11,9 @@ export const site = {
   handle: "@hokchheng",
   status: "Available for work!",
   photo: "/images/Me.png" as string | null,
-  resumeUrl: "/cv",
-  // Drop the PDF at public/resume.pdf for the hero "Download Resume" button.
-  resumeFile: "/resume.pdf",
+  // The CV PDF and the file name it downloads as, for the hero "Download Resume" button.
+  resumeFile: "/cv/Chhun-Hokchheng-CV.pdf",
+  resumeFileName: "Chhun-Hokchheng-CV.pdf",
   workUrl: "/#works",
   email: "hokchheng019@gmail.com",
   socials: {
@@ -215,14 +215,13 @@ export const stack = [
 ] as const;
 
 // Links with a `section` scroll to that section of the home page and light up
-// while it is on screen; the rest are separate pages.
+// while it is on screen.
 export const navLinks = [
   { label: "Home", href: "/#home", section: "home" },
   { label: "About Me", href: "/#about", section: "about" },
   { label: "Education", href: "/#education", section: "education" },
-  { label: "Tech Stack", href: "/#stack", section: "stack" },
   { label: "Projects", href: "/#works", section: "works" },
-  { label: "CV", href: "/cv" },
+  { label: "Contact", href: "/#contact", section: "contact" },
 ] as const;
 
 export const navSections = navLinks.flatMap((link) => ("section" in link ? [link.section] : []));

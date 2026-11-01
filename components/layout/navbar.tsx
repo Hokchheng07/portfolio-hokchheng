@@ -12,8 +12,8 @@ export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const section = useActiveSection(navSections, pathname === "/");
-  const isActive = (link: (typeof navLinks)[number]) =>
-    "section" in link ? section === link.section : pathname === link.href;
+  // Each link lights up while its section is on screen.
+  const isActive = (link: (typeof navLinks)[number]) => section === link.section;
 
   // On the home page, scroll to the section ourselves: a link whose hash is
   // already in the URL would otherwise do nothing on a second click.
@@ -37,7 +37,7 @@ export function Navbar() {
           <Link
             href="/#home"
             onClick={(event) => goTo(event, navLinks[0])}
-            className="justify-self-start text-2xl font-bold uppercase tracking-[-0.01em] sm:text-[28px]"
+            className="justify-self-start font-display text-2xl font-bold uppercase tracking-[-0.01em] sm:text-[28px]"
           >
             {site.name}.
           </Link>
@@ -116,14 +116,16 @@ function NavLink({
   block?: boolean;
   onNavigate?: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
+  const className = `relative text-[19px] tracking-wide transition-colors duration-200 ${block ? "block py-2.5 text-xl" : ""} ${
+    active ? "text-foreground" : "text-muted hover:text-foreground"
+  }`;
+
   return (
     <Link
       href={href}
       onClick={onNavigate}
       aria-current={active ? "location" : undefined}
-      className={`relative text-[19px] tracking-wide transition-colors duration-200 ${block ? "block py-2.5 text-xl" : ""} ${
-        active ? "text-foreground" : "text-muted hover:text-foreground"
-      }`}
+      className={className}
     >
       {label}
       {/* Dot under the active link. Colour only, so the bar never reflows. */}

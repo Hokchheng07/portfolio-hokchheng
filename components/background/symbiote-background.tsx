@@ -22,7 +22,7 @@ export function SymbioteBackground() {
     if (!canvas || !ctx) return undefined;
 
     const specks: Speck[] = [];
-    const symbiote = new Symbiote({ scale: 1, grips: 7, feelers: 2 });
+    const symbiote = new Symbiote({ scale: 1, tentacles: 6 });
     let width = 0;
     let height = 0;
     let placed = false;

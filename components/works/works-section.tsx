@@ -16,16 +16,24 @@ export function WorksSection() {
     <section id="works" className="scroll-mt-24 pb-32">
       <Reveal className="mx-auto w-full max-w-[1760px] px-6 sm:px-10 xl:px-16">
         <div aria-hidden className="reveal-line mb-16 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent sm:mb-20" />
-        <header className="text-center">
-          <p className="reveal font-mono text-sm uppercase tracking-[0.4em] text-muted" style={i(0)}>
-            Portfolio
-          </p>
+        {/* The page's lead section: largest heading, left-aligned, link alongside. */}
+        <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <h2
-            className="reveal mt-4 font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[1.05] tracking-[0.01em]"
-            style={i(1)}
+            className="reveal font-display text-[clamp(3.5rem,9vw,8rem)] font-medium leading-[0.95]"
+            style={i(0)}
           >
-            Selected <em className="italic">Works</em>
+            Selected <em className="italic">work</em>
           </h2>
+          <a
+            href={moreProjectsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={i(1)}
+            className="reveal group mb-2 inline-flex h-11 items-center gap-2.5 rounded-full border border-foreground/15 bg-surface/60 px-6 font-sans text-[15px] font-semibold tracking-[0.01em] backdrop-blur-sm transition-[border-color,transform] duration-150 ease-out hover:border-foreground/35 active:scale-[0.97]"
+          >
+            View more projects
+            <ArrowRightIcon className="size-4 -rotate-45 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
         </header>
       </Reveal>
 
@@ -53,10 +61,12 @@ export function WorksSection() {
                 </a>
 
                 <div className="flex flex-1 flex-col px-4 pb-4 pt-6 sm:px-5">
-                  <h3 className="text-2xl font-bold uppercase leading-snug tracking-[0.02em] sm:text-3xl">{project.title}</h3>
-                  <p className="mt-3 flex-1 text-lg leading-relaxed text-muted">{project.description}</p>
+                  <h3 className="font-display text-2xl font-bold uppercase leading-snug tracking-[0.02em] sm:text-3xl">{project.title}</h3>
+                  <p className="mt-3 text-lg leading-relaxed text-muted">{project.description}</p>
 
-                  <ul className="mt-6 flex flex-wrap gap-2">
+                  {/* Footer pinned to the card bottom, tags reserving two rows, so
+                      tags and buttons line up across cards whatever the text length. */}
+                  <ul className="mt-auto flex min-h-[4.75rem] flex-wrap content-start gap-2 pt-6">
                     {project.tags.map((tag) => (
                       <li
                         key={tag}
@@ -67,12 +77,12 @@ export function WorksSection() {
                     ))}
                   </ul>
 
-                  <div className="mt-7 grid grid-cols-[1fr_auto] gap-3">
+                  <div className="mt-5 grid grid-cols-[1fr_auto] gap-3">
                     <a
                       href={project.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group/live inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-ink font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-on-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+                      className="group/live inline-flex h-11 items-center justify-center gap-2.5 rounded-full border border-foreground/15 bg-surface font-sans text-[15px] font-semibold tracking-[0.01em] text-foreground transition-[border-color,transform] duration-150 ease-out hover:border-foreground/40 active:scale-[0.97]"
                     >
                       Visit site
                       <ArrowRightIcon className="size-4 -rotate-45 transition-transform duration-200 ease-out group-hover/live:translate-x-0.5 group-hover/live:-translate-y-0.5" />
@@ -93,17 +103,6 @@ export function WorksSection() {
           ))}
         </ul>
 
-        <div className="reveal mt-14 flex justify-center" style={i(projects.length)}>
-          <a
-            href={moreProjectsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex h-11 items-center gap-2.5 rounded-full border border-foreground/15 bg-surface/60 px-6 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur-sm transition-[border-color,transform] duration-150 ease-out hover:border-foreground/35 active:scale-[0.97]"
-          >
-            View more projects
-            <ArrowRightIcon className="size-4 -rotate-45 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
-        </div>
       </Reveal>
     </section>
   );

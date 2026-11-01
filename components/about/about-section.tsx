@@ -13,20 +13,9 @@ export function AboutSection() {
         {/* Divider between hero and About: a hairline that draws out from the centre. */}
         <div aria-hidden className="reveal-line mb-16 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent sm:mb-20" />
 
-        <header className="text-center">
-          <p className="reveal font-mono text-sm uppercase tracking-[0.4em] text-muted" style={i(0)}>
-            Discover
-          </p>
-          <h2
-            className="reveal mt-4 font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[1.05] tracking-[0.01em]"
-            style={i(1)}
-          >
-            About <em className="italic">Me</em>
-          </h2>
-        </header>
-
-        <div className="mt-16 grid items-start gap-12 sm:mt-20 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 xl:gap-24">
-          <div className="reveal mx-auto w-full max-w-[520px] lg:sticky lg:top-28 lg:max-w-none" style={i(2)}>
+        {/* Heading opens the text column, level with the top of the portrait. */}
+        <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 xl:gap-24">
+          <div className="reveal order-last mx-auto w-full max-w-[520px] lg:sticky lg:top-28 lg:order-none lg:max-w-none" style={i(2)}>
             <div className="relative aspect-[5/6] overflow-hidden rounded-[28px] bg-neutral-900 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.6)] ring-1 ring-foreground/10">
               {site.photo && (
                 <Image
@@ -41,20 +30,26 @@ export function AboutSection() {
           </div>
 
           <div>
-            <div className="grid gap-10 sm:grid-cols-2 xl:gap-16">
+            <h2
+              className="reveal font-display text-[clamp(3rem,6vw,5.5rem)] font-medium leading-none"
+              style={i(1)}
+            >
+              About me
+            </h2>
+            <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:mt-16 xl:gap-16">
               <div className="reveal" style={i(3)}>
-                <h3 className="border-b border-foreground/10 pb-5 text-2xl font-semibold sm:text-3xl">Who Am I</h3>
+                <h3 className="border-b border-foreground/10 pb-5 font-display text-2xl font-semibold sm:text-3xl">Who Am I</h3>
                 <p className="mt-6 text-lg leading-relaxed text-muted">{about.whoAmI}</p>
               </div>
               <div className="reveal" style={i(4)}>
-                <h3 className="border-b border-foreground/10 pb-5 text-2xl font-semibold sm:text-3xl">My Approach</h3>
+                <h3 className="border-b border-foreground/10 pb-5 font-display text-2xl font-semibold sm:text-3xl">My Approach</h3>
                 <p className="mt-6 text-lg leading-relaxed text-muted">{about.approach}</p>
               </div>
             </div>
 
             <div className="reveal mt-16 flex items-stretch gap-4" style={i(5)}>
               <span aria-hidden className="w-0.5 bg-foreground" />
-              <h3 className="flex-1 border-b border-foreground/10 pb-5 text-2xl font-semibold sm:text-3xl">
+              <h3 className="flex-1 border-b border-foreground/10 pb-5 font-display text-2xl font-semibold sm:text-3xl">
                 Personal Details
               </h3>
             </div>

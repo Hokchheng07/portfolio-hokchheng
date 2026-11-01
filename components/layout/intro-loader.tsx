@@ -91,7 +91,7 @@ export function IntroLoader() {
       className="intro-loader fixed inset-0 z-[70] grid place-items-center bg-background text-foreground"
     >
       <div className="intro-content flex flex-col items-center">
-        <p className="overflow-hidden pb-1 text-[clamp(3rem,9vw,7rem)] font-bold uppercase leading-none tracking-[-0.01em]">
+        <p className="overflow-hidden pb-1 font-display text-[clamp(3rem,9vw,7rem)] font-bold uppercase leading-none tracking-[-0.01em]">
           <span className="intro-name block">{site.name}.</span>
         </p>
         <p className="intro-label mt-5 font-mono text-xs uppercase tracking-[0.45em] text-muted sm:text-sm">

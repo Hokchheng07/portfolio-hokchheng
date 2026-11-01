@@ -14,28 +14,20 @@ export function StackSection() {
   return (
     <section id="stack" className="scroll-mt-24 pb-32">
       <Reveal className="mx-auto w-full max-w-[1760px] px-6 sm:px-10 xl:px-16">
-        <div aria-hidden className="reveal-line mb-16 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent sm:mb-20" />
-        <header className="text-center">
-          <p className="reveal font-mono text-sm uppercase tracking-[0.4em] text-muted" style={i(0)}>
-            Skills &amp; Tools
-          </p>
-          <h2
-            className="reveal mt-4 font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[1.05] tracking-[0.01em]"
-            style={i(1)}
-          >
-            My Tech <em className="italic">Stack</em>
-          </h2>
-        </header>
+        {/* Part of Education, so no divider and a sub-heading rather than a title. */}
+        <h2 className="reveal font-display text-3xl font-semibold sm:text-4xl" style={i(0)}>
+          Tech stack
+        </h2>
       </Reveal>
 
-      <div className="mx-auto mt-16 w-full max-w-[1760px] px-6 sm:mt-20 sm:px-10 xl:px-16">
+      <div className="mx-auto mt-6 w-full max-w-[1760px] px-6 sm:px-10 xl:px-16">
         {techStack.map((group) => (
           <Reveal
             key={group.title}
             className="grid gap-8 border-t border-foreground/10 py-10 first:border-t-0 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16 lg:py-14"
           >
             <div className="reveal" style={i(0)}>
-              <h3 className="text-2xl font-semibold sm:text-3xl">{group.title}</h3>
+              <h3 className="font-display text-2xl font-semibold sm:text-3xl">{group.title}</h3>
               <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">{group.description}</p>
             </div>
 

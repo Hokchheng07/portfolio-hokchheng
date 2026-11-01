@@ -174,7 +174,7 @@ export function EducationModal({
               <div className="@container min-w-0 flex-1">
                 <h2
                   id={titleId}
-                  className="whitespace-nowrap pt-1 font-serif text-[min(5rem,8.4cqi)] leading-[1.1] tracking-[0.01em]"
+                  className="whitespace-nowrap pt-1 font-display text-[min(5rem,6.6cqi)] leading-[1.1] tracking-[0.01em]"
                 >
                   Achievements in <em className="italic">{details.subject}</em>
                 </h2>
@@ -263,7 +263,7 @@ function Story({ details }: { details: Details }) {
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted">
             {String(n + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
           </p>
-          <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">{title}</h3>
+          <h3 className="mt-3 font-display text-2xl font-semibold sm:text-3xl">{title}</h3>
           <p className="mt-4 text-lg leading-relaxed text-muted xl:text-xl">{text}</p>
         </div>
       ))}
@@ -275,7 +275,7 @@ function Slide({ src, n, subject }: { src: string | null; n: number; subject: st
   if (src) return <img src={src} alt={`${subject} photo ${n}`} className="size-full object-cover" />;
   return (
     <div className="grid size-full place-items-center bg-[radial-gradient(circle_at_30%_20%,color-mix(in_oklab,var(--foreground)_10%,transparent),transparent_60%),linear-gradient(160deg,color-mix(in_oklab,var(--foreground)_6%,var(--background)),color-mix(in_oklab,var(--foreground)_16%,var(--background)))]">
-      <span className="font-serif text-[clamp(2rem,6vw,5rem)] italic text-foreground/20">{String(n).padStart(2, "0")}</span>
+      <span className="font-display text-[clamp(2rem,6vw,5rem)] italic text-foreground/20">{String(n).padStart(2, "0")}</span>
     </div>
   );
 }

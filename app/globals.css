@@ -27,9 +27,9 @@
   --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-on-ink: var(--on-ink);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-google-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
 }
 
 body {

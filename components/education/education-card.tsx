@@ -29,7 +29,7 @@ export function EducationCard({ entry }: { entry: EducationEntry }) {
           {/* Accent bar down the left edge */}
           <span aria-hidden className="absolute bottom-7 left-0 top-7 w-1 rounded-r-full bg-foreground" />
 
-          <h3 className="text-2xl font-bold uppercase leading-snug tracking-[0.02em] sm:text-3xl">
+          <h3 className="font-display text-2xl font-bold uppercase leading-snug tracking-[0.02em] sm:text-3xl">
             {entry.title}
           </h3>
           <p className="mt-2 text-lg font-medium text-muted">{entry.school}</p>

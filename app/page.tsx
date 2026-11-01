@@ -1,4 +1,5 @@
 import { AboutSection } from "@/components/about/about-section";
+import { ContactSection } from "@/components/contact/contact-section";
 import { EducationSection } from "@/components/education/education-section";
 import { Hero } from "@/components/hero/hero";
 import { StackSection } from "@/components/stack/stack-section";
@@ -12,7 +13,7 @@ export default function Home() {
       <EducationSection />
       <StackSection />
       <WorksSection />
-      {/* Next sections (projects, contact, etc.) go here. */}
+      <ContactSection />
     </main>
   );
 }

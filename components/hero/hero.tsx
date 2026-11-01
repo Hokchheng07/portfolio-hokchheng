@@ -29,7 +29,7 @@ export function Hero() {
           </p>
 
           <h1
-            className="rise mt-5 font-serif text-[clamp(3.25rem,6.4vw,6.75rem)] leading-[1.02] tracking-[0.01em]"
+            className="rise mt-5 font-display text-[clamp(3rem,5.4vw,5.75rem)] leading-[1.02] tracking-[0.01em]"
             style={delay(160)}
           >
             Hi, I&rsquo;m <em className="italic xl:block">{site.name}.</em>
@@ -42,15 +42,15 @@ export function Hero() {
           <div className="rise mt-9 flex flex-wrap items-center gap-3" style={delay(360)}>
             <Link
               href={site.workUrl}
-              className="group inline-flex h-11 items-center gap-2.5 rounded-full bg-ink px-6 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-on-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+              className="group inline-flex h-11 items-center gap-2.5 rounded-full bg-ink px-6 font-sans text-[15px] font-semibold tracking-[0.01em] text-on-ink transition-transform duration-150 ease-out active:scale-[0.97]"
             >
               Explore Work
               <ArrowRightIcon className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />
             </Link>
             <a
               href={site.resumeFile}
-              download
-              className="group inline-flex h-11 items-center gap-2.5 rounded-full border border-foreground/15 bg-surface/60 px-6 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground backdrop-blur-sm transition-[transform,border-color] duration-150 ease-out hover:border-foreground/35 active:scale-[0.97]"
+              download={site.resumeFileName}
+              className="group inline-flex h-11 items-center gap-2.5 rounded-full border border-foreground/15 bg-surface/60 px-6 font-sans text-[15px] font-semibold tracking-[0.01em] text-foreground backdrop-blur-sm transition-[transform,border-color] duration-150 ease-out hover:border-foreground/35 active:scale-[0.97]"
             >
               Download Resume
               <DownloadIcon className="size-4 transition-transform duration-200 ease-out group-hover:translate-y-0.5" />
