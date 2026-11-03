@@ -1,9 +1,9 @@
-import { GithubIcon, InstagramIcon, LinkedinIcon, MailIcon } from "@/components/icons";
+import { FacebookIcon, GithubIcon, InstagramIcon, MailIcon } from "@/components/icons";
 import { site } from "@/lib/site";
 
 const links = [
   { label: "GitHub", href: site.socials.github, Icon: GithubIcon },
-  { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon },
+  { label: "Facebook", href: site.socials.facebook, Icon: FacebookIcon },
   { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon },
   { label: "Email", href: `mailto:${site.email}`, Icon: MailIcon },
 ];

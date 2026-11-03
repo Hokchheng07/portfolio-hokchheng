@@ -19,9 +19,9 @@ export const site = {
   workUrl: "/#works",
   email: "hokchheng019@gmail.com",
   socials: {
-    github: "https://github.com/",
-    linkedin: "https://www.linkedin.com/",
-    instagram: "https://www.instagram.com/",
+    github: "https://github.com/Hokchheng07",
+    facebook: "https://www.facebook.com/hok.chheng.79/",
+    instagram: "https://www.instagram.com/isme_chheng/",
   },
 } as const;
 

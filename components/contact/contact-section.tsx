@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { GithubIcon, InstagramIcon, LinkedinIcon, MailIcon } from "@/components/icons";
+import { FacebookIcon, GithubIcon, InstagramIcon, MailIcon } from "@/components/icons";
 import { Reveal } from "@/components/motion/reveal";
 import { site } from "@/lib/site";
 import { ContactForm } from "./contact-form";
@@ -8,7 +8,7 @@ const i = (index: number) => ({ "--i": index }) as CSSProperties;
 
 const socials = [
   { label: "GitHub", href: site.socials.github, Icon: GithubIcon },
-  { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon },
+  { label: "Facebook", href: site.socials.facebook, Icon: FacebookIcon },
   { label: "Instagram", href: site.socials.instagram, Icon: InstagramIcon },
 ];
 
