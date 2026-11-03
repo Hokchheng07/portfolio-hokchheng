@@ -17,8 +17,8 @@ const NIGHT = {
   "--foreground": "#ededed",
   "--muted": "#8a8a8a",
   "--surface": "#161616",
-  "--ink": "#f2f2f2",
-  "--on-ink": "#0a0a0a",
+  "--accent": "#e5262f",
+  "--on-accent": "#ffffff",
 } as CSSProperties;
 
 export function Hero() {
@@ -55,7 +55,7 @@ export function Hero() {
           <div className="rise mt-9 flex flex-wrap items-center gap-3" style={delay(360)}>
             <Link
               href={site.workUrl}
-              className="group inline-flex h-11 items-center gap-2.5 rounded-full bg-ink px-6 font-sans text-[15px] font-semibold tracking-[0.01em] text-on-ink transition-transform duration-150 ease-out active:scale-[0.97]"
+              className="group inline-flex h-11 items-center gap-2.5 rounded-full bg-accent px-6 font-sans text-[15px] font-semibold tracking-[0.01em] text-on-accent transition-transform duration-150 ease-out active:scale-[0.97]"
             >
               Explore Work
               <ArrowRightIcon className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />

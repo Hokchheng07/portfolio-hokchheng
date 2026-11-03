@@ -7,6 +7,13 @@ import { Symbiote } from "./symbiote";
 const DUST = { particleCount: 180, particleSize: 1.4, speed: 1 };
 // Phones and tablets get the dust only: no pointer to follow, and no room.
 const NO_SYMBIOTE = "(hover: none), (max-width: 767px)";
+
+// A section marked data-no-symbiote keeps it away while filling the mid-screen.
+function sectionAsksForQuiet(height: number) {
+  const box = document.querySelector("[data-no-symbiote]")?.getBoundingClientRect();
+  return Boolean(box && box.top < height / 2 && box.bottom > height / 2);
+}
+
 /*
  * Site-wide dust field with a pointer-following symbiote.
  *
@@ -101,8 +108,9 @@ export function SymbioteBackground() {
 
       stepDust(specks, step, width, height, window.scrollY, DUST.speed);
       // Read every frame, so resizing across the breakpoint hides or shows it.
-      if (showSymbiote && noSymbiote.matches) symbiote.releaseAll();
-      showSymbiote = !noSymbiote.matches;
+      const hide = noSymbiote.matches || sectionAsksForQuiet(height);
+      if (showSymbiote && hide) symbiote.releaseAll();
+      showSymbiote = !hide;
       if (showSymbiote) symbiote.update(step, specks, width, height);
 
       ctx.clearRect(0, 0, width, height);

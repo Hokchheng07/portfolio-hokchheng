@@ -1,0 +1,492 @@
+.ach {
+  --ach-line: color-mix(in oklab, var(--foreground) 14%, transparent);
+  --ach-node: color-mix(in oklab, var(--foreground) 38%, transparent);
+  --ach-kanji: 0.13;
+}
+
+:root[data-theme="dark"] .ach {
+  --ach-line: color-mix(in oklab, var(--foreground) 16%, transparent);
+  --ach-node: color-mix(in oklab, var(--foreground) 40%, transparent);
+  --ach-kanji: 0.2;
+}
+
+.ach-heading {
+  text-align: center;
+}
+
+.ach-heading h2 {
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+}
+
+.ach-photo-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.25);
+}
+
+.ach-photo {
+  position: absolute;
+  inset: 0;
+}
+
+.ach-card {
+  position: relative;
+  margin: 0;
+}
+
+.ach-seal {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 68px;
+  height: 68px;
+  pointer-events: none;
+}
+
+.ach-seal-art {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+  transform: rotate(-4deg);
+}
+
+.ach-ink {
+  position: absolute;
+  inset: 4px;
+  border-radius: 12px;
+  background: var(--accent);
+  opacity: 0;
+}
+
+.ach-seal-glyph {
+  font-family: var(--font-noto-serif-jp);
+}
+
+.ach-kanji {
+  font-family: var(--font-noto-serif-jp);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  writing-mode: vertical-rl;
+  color: var(--accent);
+  opacity: var(--ach-kanji);
+  user-select: none;
+}
+
+.ach-title {
+  font-size: 3rem;
+  line-height: 1.1;
+}
+
+.ach-meta {
+  margin: 14px 0 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+.ach-body {
+  font-size: 20px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+
+.ach-stage:focus-visible,
+.ach-track:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.ach-node {
+  box-sizing: border-box;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid var(--ach-node);
+  border-radius: 50%;
+  background: var(--background);
+}
+
+.ach-node[data-on] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* Default: a plain list with everything showing. Reduced motion lands here. */
+.ach {
+  padding: 64px max(24px, 6vw) 96px;
+}
+
+.ach-heading {
+  margin-bottom: 56px;
+}
+
+.ach-thread,
+.ach-fill,
+.ach-link {
+  display: none;
+}
+
+.ach-frames {
+  display: grid;
+  gap: 72px;
+  max-width: 1180px;
+  margin: 0;
+  padding: 0 0 0 28px;
+  border-left: 1.5px solid var(--accent);
+  list-style: none;
+}
+
+.ach-frame {
+  display: grid;
+  grid-template-areas: "card card" "text kanji";
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+}
+
+.ach-media {
+  display: contents;
+}
+
+.ach-card {
+  grid-area: card;
+  aspect-ratio: 3 / 2;
+}
+
+.ach-text {
+  grid-area: text;
+}
+
+.ach-kanji {
+  grid-area: kanji;
+  font-size: 56px;
+}
+
+@media (min-width: 900px) {
+  .ach-frame {
+    grid-template-areas: "card text kanji";
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 40px;
+  }
+}
+
+/* Pinned: vertical scroll moves the track sideways. Queries match achievements-motion.ts. */
+@media (min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .ach {
+    --ach-w: min(42vw, 66vh);
+    --ach-tw: min(520px, 34vw);
+    --ach-left: calc((100vw - (var(--ach-w) + 222px + var(--ach-tw))) / 2);
+    --ach-thread: calc(230px + (100vh - 230px) * 0.52);
+    position: relative;
+    /* One viewport of pin, plus 125vh per frame. Keep in step with STEP in achievements-motion.ts. */
+    height: calc((var(--n) - 1) * 125vh + 100vh);
+    margin-bottom: 96px;
+    padding: 0;
+  }
+
+  .ach-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .ach-heading {
+    position: absolute;
+    z-index: 2;
+    top: 132px;
+    left: 0;
+    width: 100vw;
+    margin: 0;
+  }
+
+  .ach-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(var(--n) * 100vw);
+    height: 100%;
+    will-change: transform;
+  }
+
+  .ach-thread,
+  .ach-fill {
+    display: block;
+    position: absolute;
+    top: var(--ach-thread);
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--ach-line);
+  }
+
+  .ach-fill {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
+  }
+
+  .ach-frames {
+    display: block;
+    max-width: none;
+    height: 100%;
+    padding: 0;
+    border: 0;
+  }
+
+  .ach-frame {
+    --ach-shift: calc(var(--ach-side) * 5vh);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(var(--i) * 100vw);
+    width: 100vw;
+    height: 100%;
+    /* Repaints stay inside the frame instead of the whole, very wide track. */
+    contain: layout style paint;
+  }
+
+  .ach-frame[data-side="up"] {
+    --ach-side: -1;
+  }
+
+  .ach-frame[data-side="down"] {
+    --ach-side: 1;
+  }
+
+  .ach-kanji {
+    position: absolute;
+    top: calc(var(--ach-thread) + var(--ach-shift));
+    left: var(--ach-left);
+    display: flex;
+    justify-content: center;
+    width: 110px;
+    font-size: clamp(72px, 7vw, 104px);
+    transform: translateY(-50%);
+  }
+
+  .ach-card {
+    position: absolute;
+    top: calc(var(--ach-thread) - var(--ach-w) / 3 + var(--ach-shift));
+    left: calc(var(--ach-left) + 150px);
+    width: var(--ach-w);
+    height: calc(var(--ach-w) / 1.5);
+    aspect-ratio: auto;
+  }
+
+  .ach-photo {
+    transform: scale(1.06);
+    will-change: transform;
+  }
+
+  .ach-seal {
+    right: 20px;
+    bottom: 20px;
+    width: 76px;
+    height: 76px;
+    opacity: 0;
+  }
+
+  .ach-link {
+    display: contents;
+  }
+
+  .ach-link-line,
+  .ach-link-fill {
+    display: none;
+  }
+
+  .ach-node {
+    position: absolute;
+    top: calc(var(--ach-thread) - 4.75px);
+    left: calc(var(--ach-left) + 150px + var(--ach-w) + 30.5px);
+  }
+
+  /* Text sits on the far side of the thread, so the thread never crosses copy. */
+  .ach-text {
+    position: absolute;
+    left: calc(var(--ach-left) + 150px + var(--ach-w) + 72px);
+    width: var(--ach-tw);
+  }
+
+  /* The title always shows; achievements-motion.ts fades the description in near centre. */
+  .ach-body {
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .ach-frame[data-side="up"] .ach-text {
+    bottom: calc(100% - var(--ach-thread) + 32px);
+  }
+
+  .ach-frame[data-side="down"] .ach-text {
+    top: calc(var(--ach-thread) + 32px);
+  }
+}
+
+/* Long copy above the thread must clear the navbar on small laptops. */
+@media (min-width: 1024px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) and (scripting: enabled) and ((max-width: 1279.98px) or (max-height: 800px)) {
+  .ach {
+    --ach-thread: calc(230px + (100vh - 230px) * 0.5);
+  }
+
+  .ach-title {
+    font-size: 2.5rem;
+  }
+
+  .ach-meta {
+    margin: 10px 0 12px;
+    font-size: 13px;
+  }
+
+  .ach-body {
+    font-size: 18px;
+    line-height: 1.55;
+  }
+}
+
+/* Too short to fit a centred heading above the copy, so it moves aside. */
+@media (min-width: 1024px) and (min-height: 620px) and (max-height: 759.98px) and (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .ach {
+    --ach-thread: calc(230px + (100vh - 230px) * 0.45);
+  }
+
+  .ach-heading {
+    top: 126px;
+    left: var(--ach-left);
+    width: auto;
+    text-align: left;
+  }
+}
+
+/* Swipe: native horizontal scroll with snap. */
+@media ((max-width: 1023.98px) or (max-height: 619.98px)) and (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .ach {
+    --ach-frame: min(100vw - 48px, 560px);
+    padding: 40px 0 48px;
+  }
+
+  .ach-heading {
+    margin: 0 24px 24px;
+  }
+
+  .ach-track {
+    overflow-x: auto;
+    padding: 8px calc((100vw - var(--ach-frame)) / 2);
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .ach-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ach-frames {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    max-width: none;
+    padding: 0;
+    border: 0;
+  }
+
+  .ach-frame {
+    display: block;
+    flex: none;
+    width: var(--ach-frame);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .ach-media {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ach-card {
+    flex: 1;
+  }
+
+  .ach-kanji {
+    flex: none;
+    display: flex;
+    justify-content: center;
+    width: 40px;
+    font-size: 36px;
+  }
+
+  .ach-photo {
+    transform: scale(1.06);
+  }
+
+  .ach-seal {
+    right: 14px;
+    bottom: 14px;
+    width: 54px;
+    height: 54px;
+    opacity: 0;
+  }
+
+  .ach-ink {
+    inset: 3px;
+    border-radius: 9px;
+  }
+
+  .ach-link {
+    display: block;
+    position: relative;
+    height: 36px;
+  }
+
+  .ach-link-line,
+  .ach-link-fill {
+    position: absolute;
+    top: 17px;
+    right: -8px;
+    left: -8px;
+    height: 1.5px;
+    background: var(--ach-line);
+  }
+
+  .ach-link-fill {
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .ach-node {
+    position: absolute;
+    top: 12.5px;
+    left: 50%;
+    margin-left: -5.5px;
+  }
+
+  .ach-text {
+    padding-top: 4px;
+  }
+
+  .ach-title {
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .ach-meta {
+    margin: 10px 0 14px;
+    font-size: 13px;
+  }
+
+  .ach-body {
+    font-size: 19px;
+    line-height: 1.6;
+    opacity: 0;
+  }
+}

@@ -132,7 +132,7 @@ function NavLink({
       {!block && (
         <span
           aria-hidden
-          className={`absolute -bottom-2 left-1/2 size-1 -translate-x-1/2 rounded-full bg-foreground transition-[opacity,scale] duration-200 ease-out ${
+          className={`absolute -bottom-2 left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent transition-[opacity,scale] duration-200 ease-out ${
             active ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         />

@@ -45,7 +45,7 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
                 aria-hidden
                 className="absolute left-4 top-9 grid size-5 -translate-x-1/2 place-items-center rounded-full bg-background ring-1 ring-foreground/15 lg:left-1/2"
               >
-                <span className="size-2 rounded-full bg-foreground" />
+                <span className="size-2 rounded-full bg-accent" />
               </span>
 
               <div className={left ? "lg:col-start-1" : "lg:col-start-2"}>{content}</div>

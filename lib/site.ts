@@ -40,8 +40,7 @@ export const about = {
   ],
 } as const;
 
-// Education timeline, newest first. Descriptions, tags and photo stories are
-// drafts to edit. `details` turns the card into a button that opens the achievements pop-up.
+// Education timeline, newest first. Descriptions and tags are drafts to edit.
 export type EducationEntry = {
   title: string;
   school: string;
@@ -49,14 +48,6 @@ export type EducationEntry = {
   status: "completed" | "in-progress";
   description: string;
   tags: readonly string[];
-  details?: {
-    // Heading in the pop-up: "Achievements in <subject>".
-    subject: string;
-    // One entry per photo, in slideshow order. The pop-up shows each photo's
-    // own title and paragraph while that photo is on screen. `src` is a path
-    // under public/. Empty shows placeholder slides until photos are added.
-    gallery: readonly { src: string; title: string; text: string }[];
-  };
 };
 
 export const education: readonly EducationEntry[] = [
@@ -77,26 +68,6 @@ export const education: readonly EducationEntry[] = [
     description:
       "Covered front-end and back-end fundamentals, from HTML, CSS and React to Java with JDBC and PostgreSQL, practising through hands-on projects.",
     tags: ["HTML & CSS", "JavaScript", "ReactJS", "UX/UI", "Java", "JDBC", "PostgreSQL"],
-    details: {
-      subject: "Foundation",
-      gallery: [
-        {
-          src: "/education/FoundationPictures/TopStudent.jpeg",
-          title: "Top Student",
-          text: "Recognised as a top student of the Foundation programme and awarded a Certificate of Achievement at the 2025–2026 awards ceremony. The course took me from HTML & CSS, JavaScript and ReactJS to UX/UI design, then on to Java back ends with JDBC and PostgreSQL.",
-        },
-        {
-          src: "/education/FoundationPictures/SilverTeam.jpeg",
-          title: "Silver Award",
-          text: "Our team's project won the Silver Award for the top 2 project team at the programme's project competition: the result of weeks spent planning, designing and building it together.",
-        },
-        {
-          src: "/education/FoundationPictures/Team.jpeg",
-          title: "My Class",
-          text: "The 6th generation: the classmates I learned, debugged and built alongside every day. A lot of what I took from Foundation came from working with them.",
-        },
-      ],
-    },
   },
   {
     title: "Pre-University · 6th Generation",
@@ -106,26 +77,6 @@ export const education: readonly EducationEntry[] = [
     description:
       "Focused on web design: layout, interactivity and working with APIs, building pages from scratch.",
     tags: ["HTML + CSS", "JavaScript", "UX/UI", "Postman"],
-    details: {
-      subject: "Pre-University",
-      gallery: [
-        {
-          src: "/education/PreUniPictures/BronzePreUni.jpg",
-          title: "Bronze Award",
-          text: "Our team earned the Bronze Award for the top 3 project team, putting what we learned in HTML and CSS, JavaScript and UX/UI into one finished project.",
-        },
-        {
-          src: "/education/PreUniPictures/BestSpeaking.jpg",
-          title: "Best Speaking",
-          text: "Recognised for Best Speaking at the Pre-University awards ceremony in April 2026.",
-        },
-        {
-          src: "/education/PreUniPictures/Speaker.jpeg",
-          title: "On Stage",
-          text: "Presenting our team's project and research to the judges and audience, walking them through the problem, our process and what we built.",
-        },
-      ],
-    },
   },
   {
     title: "High School",
@@ -136,6 +87,74 @@ export const education: readonly EducationEntry[] = [
     tags: ["General Education"],
   },
 ];
+
+// Achievements gallery, one frame per photo, newest programme first. `photo` is a
+// path under public/; `alt` describes what the photo shows. `seal` stamps the red
+// hanko on the frame, so real awards only. `kanji` is decorative: its characters
+// must be in the subset font in app/fonts/, which also holds the alternatives
+// 雄弁賞, 演説賞, 同期 and 優等.
+export const achievements = [
+  {
+    title: "Top Student",
+    seal: true,
+    kanji: "首席",
+    programme: "Foundation",
+    period: "2026",
+    photo: "/education/FoundationPictures/TopStudent.jpeg",
+    alt: "Hokchheng holding a framed certificate beside a presenter on a red stage, in front of an ISTAD awards banner and balloons.",
+    text: "Recognised as a top student of the Foundation programme and awarded a Certificate of Achievement at the 2025–2026 awards ceremony. The course took me from HTML & CSS, JavaScript and ReactJS to UX/UI design, then on to Java back ends with JDBC and PostgreSQL.",
+  },
+  {
+    title: "Silver Award",
+    seal: true,
+    kanji: "銀賞",
+    programme: "Foundation",
+    period: "2026",
+    photo: "/education/FoundationPictures/SilverTeam.jpeg",
+    alt: "A project team in white uniforms holding a banner that reads Silver Award for Top 2 Project Team.",
+    text: "Our team's project won the Silver Award for the top 2 project team at the programme's project competition: the result of weeks spent planning, designing and building it together.",
+  },
+  {
+    title: "My Class",
+    seal: false,
+    kanji: "学友",
+    programme: "Foundation",
+    period: "2026",
+    photo: "/education/FoundationPictures/Team.jpeg",
+    alt: "Classmates in white ISTAD polo shirts posing together in a doorway.",
+    text: "The 6th generation: the classmates I learned, debugged and built alongside every day. A lot of what I took from Foundation came from working with them.",
+  },
+  {
+    title: "Bronze Award",
+    seal: true,
+    kanji: "銅賞",
+    programme: "Pre-University",
+    period: "2026",
+    photo: "/education/PreUniPictures/BronzePreUni.jpg",
+    alt: "A project team and staff on a red stage holding a banner that reads Bronze Award for Top 3 Project Team.",
+    text: "Our team earned the Bronze Award for the top 3 project team, putting what we learned in HTML and CSS, JavaScript and UX/UI into one finished project.",
+  },
+  {
+    title: "Best Speaking",
+    seal: true,
+    kanji: "弁論賞",
+    programme: "Pre-University",
+    period: "2026",
+    photo: "/education/PreUniPictures/BestSpeaking.jpg",
+    alt: "Hokchheng receiving a framed certificate from a presenter on a red stage at the ISTAD awards ceremony.",
+    text: "Recognised for Best Speaking at the Pre-University awards ceremony in April 2026.",
+  },
+  {
+    title: "On Stage",
+    seal: false,
+    kanji: "登壇",
+    programme: "Pre-University",
+    period: "2026",
+    photo: "/education/PreUniPictures/Speaker.jpeg",
+    alt: "Hokchheng speaking into a microphone at the front of a room, facing seated judges, beside a projected slide titled Research.",
+    text: "Presenting our team's project and research to the judges and audience, walking them through the problem, our process and what we built.",
+  },
+] as const;
 
 // Selected Works section. `image` is a screenshot under public/projects/.
 export const projects = [

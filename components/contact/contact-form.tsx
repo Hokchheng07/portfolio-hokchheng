@@ -64,7 +64,7 @@ export function ContactForm() {
 
       <button
         type="submit"
-        className="group mt-2 inline-flex h-[72px] w-full items-center justify-center gap-3 rounded-full bg-ink font-sans text-lg font-semibold tracking-[0.01em] text-on-ink sm:text-xl transition-transform duration-150 ease-out active:scale-[0.98]"
+        className="group mt-2 inline-flex h-[72px] w-full items-center justify-center gap-3 rounded-full bg-accent font-sans text-lg font-semibold tracking-[0.01em] text-on-accent sm:text-xl transition-transform duration-150 ease-out active:scale-[0.98]"
       >
         Send message
         <ArrowRightIcon className="size-5 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />

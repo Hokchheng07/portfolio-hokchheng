@@ -48,7 +48,7 @@ export function AboutSection() {
             </div>
 
             <div className="reveal mt-16 flex items-stretch gap-4" style={i(5)}>
-              <span aria-hidden className="w-0.5 bg-foreground" />
+              <span aria-hidden className="w-0.5 bg-accent" />
               <h3 className="flex-1 border-b border-foreground/10 pb-5 font-display text-2xl font-semibold sm:text-3xl">
                 Personal Details
               </h3>

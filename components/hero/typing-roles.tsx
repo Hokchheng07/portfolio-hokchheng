@@ -48,7 +48,7 @@ export function TypingRoles({ roles }: { roles: readonly string[] }) {
       )}
       <span
         aria-hidden
-        className="cursor-block ml-1 inline-block h-[1em] w-[0.5em] align-[-0.12em] bg-foreground/45"
+        className="cursor-block ml-1 inline-block h-[1em] w-[0.5em] align-[-0.12em] bg-accent"
       />
     </p>
   );

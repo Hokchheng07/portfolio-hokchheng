@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono, Google_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { SymbioteBackground } from "@/components/background/symbiote-background";
 import { IntroLoader } from "@/components/layout/intro-loader";
 import { Navbar } from "@/components/layout/navbar";
@@ -26,6 +27,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Achievements kanji and seal. Noto Serif JP (OFL), subset to the few characters
+// in lib/site.ts, so it stays a few KB instead of megabytes.
+const kanji = localFont({
+  variable: "--font-noto-serif-jp",
+  src: [
+    { path: "./fonts/noto-serif-jp-subset-600.woff2", weight: "600" },
+    { path: "./fonts/noto-serif-jp-subset-900.woff2", weight: "900" },
+  ],
+});
+
 // Link previews use app/opengraph-image.jpg and app/twitter-image.jpg, made in
 // Figma ("Hokchheng Portfolio — Open Graph").
 export const metadata: Metadata = {
@@ -50,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${googleSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${googleSans.variable} ${geistMono.variable} ${kanji.variable} h-full antialiased`}
       data-intro="loading"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
