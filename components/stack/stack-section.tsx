@@ -8,7 +8,7 @@ const i = (index: number) => ({ "--i": index }) as CSSProperties;
 /*
  * One row per group: title and description on the left, logo tiles on the
  * right. Logos sit in grey like the hero orbit tiles and take their brand
- * colour on hover.
+ * colour on hover, or all the time on touch screens, which have no hover.
  */
 export function StackSection() {
   return (
@@ -40,7 +40,7 @@ export function StackSection() {
                     <img
                       src={icon}
                       alt=""
-                      className="size-11 opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                      className="tech-logo size-11"
                     />
                     <span className="text-center font-mono text-xs font-semibold uppercase tracking-[0.14em] text-foreground/75">
                       {name}

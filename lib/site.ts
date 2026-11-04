@@ -2,11 +2,13 @@
 
 export const site = {
   name: "Hokchheng",
+  // Name of the chat assistant in components/chat/.
+  assistant: "YengAI",
   fullName: "Hok Chheng",
   initials: "HC",
   title: "Hokchheng — Portfolio",
   // Deployed address; makes the Open Graph image URL absolute for link previews.
-  url: "https://portfolio-hokchheng.vercel.app",
+  url: "https://www.hokchheng.site",
   description: "Personal portfolio and CV of Hokchheng.",
   location: "Phnom Penh · Cambodia",
   roles: ["Full-Stack Web Developer", "UI / UX Enthusiast", "Problem Solver"],
@@ -36,7 +38,10 @@ export const about = {
     { label: "Based in", value: "Phnom Penh, Cambodia" },
     { label: "Email", value: site.email },
     { label: "Focus", value: "Full-stack web development" },
-    // Add more, e.g. { label: "Education", value: "Your university" },
+    { label: "Education", value: "2nd-year student at ISTAD" },
+    { label: "Languages", value: "Khmer, English" },
+    { label: "Open to", value: "Internship, part-time, freelance, full-time" },
+    { label: "Work setup", value: "Remote or on-site in Phnom Penh" },
   ],
 } as const;
 
@@ -57,7 +62,7 @@ export const education: readonly EducationEntry[] = [
     period: "2026 – Present",
     status: "in-progress",
     description:
-      "Studying software development in depth, building on the foundation and pre-university programmes with larger, real-world projects.",
+      "Second-year student, studying software development in depth and building on the foundation and pre-university programmes with larger, real-world projects.",
     tags: ["Software Development", "Java", "Spring", "React"],
   },
   {
@@ -199,9 +204,13 @@ export const techStack = [
       { name: "HTML", icon: "/tech/html5.svg" },
       { name: "CSS", icon: "/tech/css3.svg" },
       { name: "JavaScript", icon: "/tech/javascript.svg" },
+      { name: "TypeScript", icon: "/tech/typescript.svg" },
       { name: "React", icon: "/tech/react.svg" },
       { name: "Next.js", icon: "/tech/nextjs.svg" },
+      { name: "Redux", icon: "/tech/redux.svg" },
       { name: "Tailwind CSS", icon: "/tech/tailwindcss.svg" },
+      { name: "React Hook Form", icon: "/tech/react-hook-form.svg" },
+      { name: "Zod", icon: "/tech/zod.svg" },
     ],
   },
   {
@@ -209,8 +218,10 @@ export const techStack = [
     description: "The foundations behind the apps: server logic, APIs, data, and the environments they run in.",
     items: [
       { name: "Java", icon: "/tech/java.svg" },
+      { name: "C++", icon: "/tech/cplusplus.svg" },
       { name: "Spring", icon: "/tech/spring.svg" },
       { name: "PostgreSQL", icon: "/tech/postgresql.svg" },
+      { name: "Firebase", icon: "/tech/firebase.svg" },
       { name: "Linux", icon: "/tech/linux.svg" },
       { name: "Docker", icon: "/tech/docker.svg" },
     ],
@@ -246,3 +257,25 @@ export const navLinks = [
 ] as const;
 
 export const navSections = navLinks.flatMap((link) => ("section" in link ? [link.section] : []));
+
+// Facts for the chat assistant that the CV does not cover. Each entry becomes a
+// button with this exact answer, and the assistant can use it for typed questions.
+// e.g. { question: "Is Hokchheng open to remote work?", answer: "Yes, ..." },
+export const faq: readonly { question: string; answer: string }[] = [
+  {
+    question: `What work is ${site.name} open to?`,
+    answer: "Internships, part-time, freelance and full-time roles, either remote or on-site in Phnom Penh.",
+  },
+  {
+    question: `When can ${site.name} start?`,
+    answer: `Right away. ${site.name} is a second-year student at ISTAD, so hours are flexible and fit around classes, in the evenings and on weekends.`,
+  },
+  {
+    question: `Does ${site.name} have work experience?`,
+    answer: `No professional roles yet. ${site.name}'s experience comes from school projects at ISTAD, which earned Silver and Bronze team awards.`,
+  },
+  {
+    question: `What languages does ${site.name} speak?`,
+    answer: "Khmer and English.",
+  },
+];

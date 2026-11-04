@@ -90,6 +90,31 @@ body {
   animation: scroll-dot 1.8s ease-in-out infinite;
 }
 
+/* Tech stack logos. Dark brand colours turn near-black in grey, so dark mode lifts them. */
+.tech-logo {
+  opacity: 0.6;
+  filter: grayscale(1);
+  transition: opacity 300ms ease, filter 300ms ease;
+}
+
+:root[data-theme="dark"] .tech-logo {
+  opacity: 0.9;
+  filter: grayscale(1) brightness(1.6);
+}
+
+:root .group:hover .tech-logo {
+  opacity: 1;
+  filter: none;
+}
+
+@media (hover: none) {
+  :root .tech-logo,
+  :root[data-theme="dark"] .tech-logo {
+    opacity: 1;
+    filter: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rise,
   .cursor-block,

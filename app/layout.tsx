@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono, Google_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import { SymbioteBackground } from "@/components/background/symbiote-background";
+import { ChatWidget } from "@/components/chat/chat-widget";
 import { IntroLoader } from "@/components/layout/intro-loader";
 import { Navbar } from "@/components/layout/navbar";
 import { themeScript } from "@/components/layout/theme-toggle";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
+        <ChatWidget />
         <SymbioteBackground />
         <IntroLoader />
       </body>
