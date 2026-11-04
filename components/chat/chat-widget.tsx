@@ -1,7 +1,8 @@
 "use client";
 
 import { type CSSProperties, type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import { ArrowRightIcon, ChatIcon, CloseIcon } from "@/components/icons";
+import { BotAvatar } from "@/components/chat/bot-avatar";
+import { ArrowRightIcon, CloseIcon } from "@/components/icons";
 import { type AnswerLink, type PredefinedAnswer, predefinedAnswers } from "@/lib/chat-answers";
 import { site } from "@/lib/site";
 import "./chat-widget.css";
@@ -37,7 +38,7 @@ export function ChatWidget() {
   useEffect(() => () => request.current?.abort(), []);
 
   useEffect(() => {
-    log.current?.scrollTo({ top: log.current.scrollHeight });
+    if (messages.length > 0 || error) log.current?.scrollTo({ top: log.current.scrollHeight });
   }, [messages, error]);
 
   useEffect(() => {
@@ -124,13 +125,13 @@ export function ChatWidget() {
   const remaining = predefinedAnswers.filter(({ question }) => !asked.has(question));
 
   const questionButtons = (
-    <ul className="grid gap-2 pt-2">
+    <ul className="grid gap-2 pt-2 sm:grid-cols-2">
       {remaining.map((item) => (
         <li key={item.question}>
           <button
             type="button"
             onClick={() => showAnswer(item)}
-            className="min-h-11 w-full rounded-2xl border border-foreground/10 px-4 py-2 text-left text-[15px] transition-colors duration-150 hover:border-foreground/30"
+            className="min-h-14 w-full rounded-2xl border border-foreground/10 px-4 py-2.5 text-left text-[15px] leading-snug transition-colors duration-150 hover:border-foreground/30"
           >
             {item.question}
           </button>
@@ -148,10 +149,14 @@ export function ChatWidget() {
         data-open={open}
         inert={!open}
         onKeyDown={handlePanelKeyDown}
-        className="chat-panel flex h-[min(600px,max(calc(100dvh-13.5rem),min(320px,calc(100dvh-6rem))))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-[28px] border border-foreground/10 bg-surface shadow-[0_34px_70px_-30px_rgba(0,0,0,0.45)] sm:w-[420px]"
+        className="chat-panel flex h-[min(820px,max(calc(100dvh-14rem),min(320px,calc(100dvh-7rem))))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-[28px] border border-foreground/10 bg-surface shadow-[0_34px_70px_-30px_rgba(0,0,0,0.45)] sm:w-[600px]"
       >
-        <header className="flex items-center justify-between gap-4 border-b border-foreground/10 py-3 pl-6 pr-3">
-          <h2 className="font-display text-lg font-semibold leading-tight">{site.assistant}</h2>
+        <header className="flex items-center gap-3 border-b border-foreground/10 py-3 pl-5 pr-3">
+          <BotAvatar className="size-12 shrink-0" />
+          <div className="min-w-0 flex-1">
+            <h2 className="font-display text-xl font-semibold leading-tight">{site.assistant}</h2>
+            <p className="truncate text-sm text-muted">Ask about {site.name}&apos;s CV</p>
+          </div>
           <button
             type="button"
             onClick={close}
@@ -162,51 +167,59 @@ export function ChatWidget() {
           </button>
         </header>
 
-        <div ref={log} role="log" aria-live="polite" aria-busy={busy} className="flex-1 space-y-3 overflow-y-auto overscroll-contain p-4">
+        <div ref={log} role="log" aria-live="polite" aria-busy={busy} className="flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
           {messages.length === 0 && (
-            <p className="px-2 pt-2 text-base leading-relaxed text-muted">
-              Ask anything about {site.name}&apos;s skills, projects or education.
-            </p>
+            <div className="flex flex-col items-center gap-4 px-2 py-6 text-center">
+              <BotAvatar className="size-24" />
+              <p className="max-w-sm text-lg leading-relaxed text-muted">
+                Ask anything about {site.name}&apos;s skills, projects or education.
+              </p>
+            </div>
           )}
 
           {messages.map(({ role, content, links }, index) => (
-            <div
-              key={index}
-              className={`w-fit max-w-[85%] rounded-[20px] px-4 py-2.5 text-[15px] leading-relaxed ${
-                role === "user" ? "ml-auto bg-accent text-on-accent" : "bg-foreground/[0.06]"
-              }`}
-            >
-              <p className="whitespace-pre-wrap break-words">{content}</p>
-              {links && (
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {links.map(({ label, href }) => (
-                    <li key={href}>
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-9 items-center rounded-full border border-foreground/15 bg-surface px-3.5 text-sm font-semibold transition-[border-color] duration-150 hover:border-foreground/40"
-                      >
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div key={index} className={`flex items-end gap-2.5 ${role === "user" ? "justify-end" : ""}`}>
+              {role === "assistant" && <BotAvatar className="size-12 shrink-0" />}
+              <div
+                className={`min-w-0 max-w-[85%] rounded-[20px] px-4 py-3 text-base leading-relaxed ${
+                  role === "user" ? "bg-accent text-on-accent" : "bg-foreground/[0.06]"
+                }`}
+              >
+                <p className="whitespace-pre-wrap break-words">{content}</p>
+                {links && (
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {links.map(({ label, href }) => (
+                      <li key={href}>
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-9 items-center rounded-full border border-foreground/15 bg-surface px-3.5 text-sm font-semibold transition-[border-color] duration-150 hover:border-foreground/40"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           ))}
 
           {waiting && (
-            <p aria-label="Writing a reply" className="flex w-fit gap-1.5 rounded-[20px] bg-foreground/[0.06] px-4 py-4">
-              {[0, 160, 320].map((delay) => (
-                <span
-                  key={delay}
-                  aria-hidden
-                  className="chat-dot size-1.5 rounded-full bg-foreground"
-                  style={{ "--delay": `${delay}ms` } as CSSProperties}
-                />
-              ))}
-            </p>
+            <div className="flex items-end gap-2.5">
+              <BotAvatar className="size-12 shrink-0" />
+              <p aria-label="Writing a reply" className="flex w-fit gap-1.5 rounded-[20px] bg-foreground/[0.06] px-4 py-4">
+                {[0, 160, 320].map((delay) => (
+                  <span
+                    key={delay}
+                    aria-hidden
+                    className="chat-dot size-1.5 rounded-full bg-foreground"
+                    style={{ "--delay": `${delay}ms` } as CSSProperties}
+                  />
+                ))}
+              </p>
+            </div>
           )}
 
           {error && <p className="px-2 text-sm leading-relaxed text-accent">{error}</p>}
@@ -222,7 +235,7 @@ export function ChatWidget() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="flex items-end gap-2 border-t border-foreground/10 p-3">
+        <form onSubmit={handleSubmit} className="flex items-end gap-2 border-t border-foreground/10 p-4">
           <textarea
             ref={input}
             value={draft}
@@ -253,9 +266,9 @@ export function ChatWidget() {
         aria-expanded={open}
         aria-controls="chat-panel"
         aria-label={open ? "Close chat" : `Ask ${site.assistant} about ${site.name}`}
-        className="chat-launcher grid size-14 place-items-center rounded-full bg-accent text-on-accent shadow-[0_18px_40px_-16px_rgba(0,0,0,0.55)]"
+        className="chat-launcher grid size-16 place-items-center overflow-hidden rounded-full bg-accent text-on-accent shadow-[0_18px_40px_-16px_rgba(0,0,0,0.55)]"
       >
-        {open ? <CloseIcon className="size-6" /> : <ChatIcon className="size-6" />}
+        {open ? <CloseIcon className="size-6" /> : <BotAvatar className="size-16" />}
       </button>
     </div>
   );
