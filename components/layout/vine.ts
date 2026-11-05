@@ -27,9 +27,9 @@ const CROSSING_HALF_MIN = 10;
 // With the links collapsed the middle is empty, so it can hold a second crossing.
 const WIDE_GAP = 420;
 const LEAF_GAP_PX = 40;
-const BLOOM_CLEARANCE_PX = 34;
+const BLOOM_CLEARANCE_PX = 42;
 // A blossom's radius at scale 1, and the gap kept to the top of the screen.
-const BLOOM_RADIUS = 7;
+const BLOOM_RADIUS = 8;
 const SCREEN_MARGIN = 2;
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -287,7 +287,7 @@ export function bindVine(parts: VineParts) {
       const trough = b.y > H + 3 && b.y >= a.y && b.y > c.y;
       if (!peak && !trough) continue;
       peaks.push(b.s);
-      addBlossom(b, Math.max(1.1, 1.6 * scale), 1);
+      addBlossom(b, Math.max(1.4, 2 * scale), 1);
     }
 
     // Along the arcs, leaves, with a small blossom in every third place.
@@ -301,7 +301,7 @@ export function bindVine(parts: VineParts) {
       index++;
       const clear = peaks.every((s) => Math.abs(s - sample.s) > BLOOM_CLEARANCE_PX * scale);
       if (index % 3 === 0 && clear) {
-        addBlossom(sample, Math.max(0.72, 0.95 * scale), index % 2 ? 1 : -1);
+        addBlossom(sample, Math.max(0.9, 1.2 * scale), index % 2 ? 1 : -1);
       } else {
         const { place, bud } = makeLeaf(sample, index % 2 ? 1 : -1, (1.15 + size * 0.8) * scale);
         leaves.append(place);

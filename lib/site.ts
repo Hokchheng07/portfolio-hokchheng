@@ -42,8 +42,6 @@ export const about = {
     { label: "Focus", value: "Full-stack web development" },
     { label: "Education", value: "2nd-year student at ISTAD" },
     { label: "Languages", value: "Khmer, English" },
-    { label: "Open to", value: "Internship, part-time, freelance, full-time" },
-    { label: "Work setup", value: "Remote or on-site in Phnom Penh" },
   ],
 } as const;
 

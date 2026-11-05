@@ -132,7 +132,7 @@ export function IntroLoader() {
       data-phase={T === null ? "hold" : "strike"}
       className={`intro-loader fixed inset-0 z-[70] ${released ? "pointer-events-none" : ""}`}
       // Once JS is drawing, the timeline owns the exit and the CSS safety net stands down.
-      style={size ? { animation: "none" } : { background: "#0a0a0a" }}
+      style={size ? { animation: "none" } : { background: "var(--background)" }}
     >
       {size && <KatanaScene T={T ?? 0} W={size.W} H={size.H} reduced={reduced} card={card} />}
     </div>

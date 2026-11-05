@@ -19,6 +19,29 @@ html[data-intro="loading"] .rise {
   animation: intro-fallback 0.4s ease 8s forwards;
   --settle: cubic-bezier(0.45, 0, 0.55, 1);
   --leaf-scale: 1.6;
+
+  /* Theme colours. --kl-ink draws the strike: the cut line, sparks and swoosh. */
+  --kl-name: var(--foreground);
+  --kl-label: var(--muted);
+  --kl-jp: #c6c6c3;
+  --kl-track: #d4d4d1;
+  --kl-fill: var(--foreground);
+  --kl-ink: var(--foreground);
+  --kl-edge: rgba(10, 10, 10, 0.5);
+  --kl-glow: rgba(179, 18, 27, 0.75);
+  --kl-glow-soft: rgba(179, 18, 27, 0.25);
+}
+
+:root[data-theme="dark"] .intro-loader {
+  --kl-name: #f2f2f0;
+  --kl-label: #707070;
+  --kl-jp: #2c2c2c;
+  --kl-track: #1f1f1f;
+  --kl-fill: #ededeb;
+  --kl-ink: #fff;
+  --kl-edge: rgba(255, 255, 255, 0.6);
+  --kl-glow: rgba(255, 255, 255, 0.95);
+  --kl-glow-soft: rgba(255, 255, 255, 0.35);
 }
 
 /*
@@ -29,7 +52,7 @@ html[data-intro="loading"] .rise {
  */
 .kl-card {
   overflow: hidden;
-  background: #0a0a0a;
+  background: var(--background);
 }
 
 /* Leaves: a slow straight drift, a sway with a tilt, and a steady spin. */
@@ -127,7 +150,7 @@ html[data-intro="loading"] .rise {
   writing-mode: vertical-rl;
   font-size: 15px;
   letter-spacing: 0.7em;
-  color: #2c2c2c;
+  color: var(--kl-jp);
   animation: kl-fade 0.55s var(--settle) 0.4s both;
 }
 
@@ -142,10 +165,11 @@ html[data-intro="loading"] .rise {
 
 .kl-name {
   font-weight: 700;
-  font-size: 128px;
+  /* Scales with the screen, so the name never reaches the edges or the kana. */
+  font-size: min(128px, 12vw);
   line-height: 1;
   letter-spacing: -0.02em;
-  color: #f2f2f0;
+  color: var(--kl-name);
   animation: kl-in 0.55s var(--settle) 0.05s both;
 }
 
@@ -160,16 +184,16 @@ html[data-intro="loading"] .rise {
   padding-left: 0.42em;
   font-size: 12px;
   letter-spacing: 0.42em;
-  color: #707070;
+  color: var(--kl-label);
   animation: kl-fade 0.55s var(--settle) 0.18s both;
 }
 
 .kl-track {
   margin-top: 22px;
   width: 280px;
-  height: 2px;
+  height: 4px;
   border-radius: 2px;
-  background: #1f1f1f;
+  background: var(--kl-track);
   overflow: hidden;
   animation: kl-fade 0.55s var(--settle) 0.25s both;
 }
@@ -238,7 +262,7 @@ html[data-intro="loading"] .rise {
 .kl-fill {
   height: 100%;
   border-radius: 2px;
-  background: #ededeb;
+  background: var(--kl-fill);
   transform-origin: left;
   animation: kl-bar 1.76s linear both;
 }
@@ -280,7 +304,7 @@ html[data-intro="loading"] .rise {
   }
 
   .kl-name {
-    font-size: 50px;
+    font-size: min(50px, 12vw);
   }
 
   .kl-label {

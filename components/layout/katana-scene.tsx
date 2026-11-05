@@ -237,7 +237,7 @@ export function DriftingLeaves({ loop = false }: { loop?: boolean }) {
 }
 
 /*
- * The loader card: name, label and bar on black, with drifting leaves. All of
+ * The loader card: name, label and bar on the page colour, with drifting leaves. All of
  * its motion is CSS (see intro-loader.css), on transforms and opacity, so it
  * stays smooth while the page and the hero scene load on the main thread. It
  * renders once; the loader shows three copies (whole, and the two halves), all
@@ -386,9 +386,9 @@ export function KatanaScene({
       <svg width={W} height={H} style={{ position: "absolute", left: 0, top: 0, overflow: "visible", opacity: 1 - settle(T, C.Cut, C.Cut + 0.15) }}>
         {pts.slice(0, -1).map((a, i) => {
           const b = pts[i + 1];
-          return <path key={i} d={`M${a.o} L${b.o} L${b.n} L${a.n} Z`} fill="#fff" opacity={0.2 * (1 - i / 9)} />;
+          return <path key={i} d={`M${a.o} L${b.o} L${b.n} L${a.n} Z`} fill="var(--kl-ink)" opacity={0.2 * (1 - i / 9)} />;
         })}
-        <path d={"M" + pts.map((p) => p.o.join(",")).join(" L")} fill="none" stroke="#fff" strokeWidth="1.5" opacity="0.8" />
+        <path d={"M" + pts.map((p) => p.o.join(",")).join(" L")} fill="none" stroke="var(--kl-ink)" strokeWidth="1.5" opacity="0.8" />
         <path
           d={"M" + pts.slice(0, 5).map((p) => p.o.join(",")).join(" L")}
           fill="none"
@@ -414,7 +414,7 @@ export function KatanaScene({
           top: 0,
           width: L,
           height: 1,
-          background: "rgba(255,255,255,0.6)",
+          background: "var(--kl-edge)",
           transformOrigin: "0 0",
           transform: `rotate(${ang}deg)`,
           opacity: edgeOp,
@@ -447,8 +447,8 @@ export function KatanaScene({
             transform: `rotate(${(Math.atan2(vy + G * a, vx) * 180) / Math.PI}deg)`,
             opacity: 1 - Math.pow(a / p.life, 1.5),
             background: p.red
-              ? `linear-gradient(90deg, rgba(255,255,255,0), #fff 68%, ${RED} 68%)`
-              : "linear-gradient(90deg, rgba(255,255,255,0), #fff)",
+              ? `linear-gradient(90deg, transparent, var(--kl-ink) 68%, ${RED} 68%)`
+              : "linear-gradient(90deg, transparent, var(--kl-ink))",
           }}
         />,
       );
@@ -498,11 +498,11 @@ export function KatanaScene({
           width: Math.max(0, Math.min(s, L)),
           height: 1.5,
           marginTop: -0.75,
-          background: "#fff",
+          background: "var(--kl-ink)",
           transformOrigin: "0 50%",
           transform: `rotate(${ang}deg)`,
           opacity: lineOp,
-          boxShadow: `0 0 ${6 * glow}px rgba(255,255,255,0.95), 0 0 ${22 * glow}px rgba(255,255,255,0.35)`,
+          boxShadow: `0 0 ${6 * glow}px var(--kl-glow), 0 0 ${22 * glow}px var(--kl-glow-soft)`,
         }}
       />
       {debris}
