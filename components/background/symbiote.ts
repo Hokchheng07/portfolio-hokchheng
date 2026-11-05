@@ -59,7 +59,7 @@ const CLING = 0.8;
 // Seconds the body takes to settle on the pointer. The spring is derived from
 // it: stiffness for that settle time, damping just under critical so the body
 // lags behind and eases in with only a hint of overshoot.
-const FOLLOW_SECONDS = 5;
+const FOLLOW_SECONDS = 5 / 1.5;
 // 3.7 puts 95% of the way there at FOLLOW_SECONDS for this damping.
 const FOLLOW_RATE = 20 / FOLLOW_SECONDS;
 const SPRING = (FOLLOW_RATE / 60) ** 2;

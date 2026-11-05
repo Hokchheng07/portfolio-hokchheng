@@ -253,7 +253,7 @@ export function LoaderCard({ name }: { name: string }) {
       <div className="kl-center">
         <div className="kl-dim-name">
           <div className="kl-name" style={{ fontFamily: SANS }}>
-            {name.toUpperCase()}.
+            {name.toUpperCase()}
           </div>
         </div>
         <div className="kl-dim-meta">

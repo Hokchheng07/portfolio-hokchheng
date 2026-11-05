@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties, useEffect, useRef } from "react";
+import { type CSSProperties, type SVGProps, useEffect, useRef } from "react";
 import { Reveal } from "@/components/motion/reveal";
 import { achievements } from "@/lib/site";
 import { bindGallery } from "./achievements-motion";
@@ -39,8 +39,8 @@ export function AchievementsSection() {
         </Reveal>
 
         <div data-track="" className="ach-track">
-          <div aria-hidden className="ach-thread" />
-          <div data-fill="" aria-hidden className="ach-fill" />
+          <ThreadWave className="ach-thread" />
+          <ThreadWave className="ach-fill" data-fill="" />
 
           <ol className="ach-frames">
             {achievements.map(({ title, programme, period, photo, alt, text, seal, kanji }, index) => (
@@ -73,8 +73,8 @@ export function AchievementsSection() {
                 </div>
 
                 <div aria-hidden className="ach-link">
-                  <div className="ach-link-line" />
-                  <div data-frame-fill="" className="ach-link-fill" />
+                  <LinkWave className="ach-link-line" up={index % 2 === 0} />
+                  <LinkWave className="ach-link-fill" up={index % 2 === 0} data-frame-fill="" />
                   <span data-node="" className="ach-node" />
                 </div>
 
@@ -93,6 +93,42 @@ export function AchievementsSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// The pinned thread: crest to trough and back, so each node sits on a turn and the
+// line always leaves on the side away from that frame's text. Each turn finishes
+// in the first 40% of its span, so the whole curve shows beside the centred frame;
+// the rest of the span runs level behind the next photo. It stretches to fit (see
+// achievements.css), so nothing needs measuring. The tail runs off the track's end.
+const WAVE_SEGMENTS = achievements.length - 1;
+const WAVE_PATH =
+  "M0 0" +
+  Array.from({ length: WAVE_SEGMENTS }, (_, i) => {
+    const x = i * 100;
+    const [from, to] = i % 2 === 0 ? [0, 100] : [100, 0];
+    return ` C${x + 20} ${from} ${x + 20} ${to} ${x + 40} ${to} H${x + 100}`;
+  }).join("") +
+  ` H${WAVE_SEGMENTS * 100 + 100}`;
+
+function ThreadWave(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg aria-hidden viewBox={`0 0 ${WAVE_SEGMENTS * 100} 100`} preserveAspectRatio="none" {...props}>
+      <path d={WAVE_PATH} vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
+// The swipe layout's piece of the same wave: mid-height to this frame's turn and
+// back, split at the midpoints of the S-curve so neighbouring frames join smoothly.
+function LinkWave({ up, ...props }: SVGProps<SVGSVGElement> & { up: boolean }) {
+  return (
+    <svg aria-hidden viewBox="0 0 100 100" preserveAspectRatio="none" {...props}>
+      <path
+        d={up ? "M0 50 C12.5 25 25 0 50 0 C75 0 87.5 25 100 50" : "M0 50 C12.5 75 25 100 50 100 C75 100 87.5 75 100 50"}
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
   );
 }
 

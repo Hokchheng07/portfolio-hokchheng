@@ -7,6 +7,8 @@ export const site = {
   fullName: "Hok Chheng",
   initials: "HC",
   title: "Hokchheng — Portfolio",
+  // Shown in the footer. A fixed value, since the pages are prerendered.
+  copyrightYear: 2026,
   // Deployed address; makes the Open Graph image URL absolute for link previews.
   url: "https://www.hokchheng.site",
   description: "Personal portfolio and CV of Hokchheng.",

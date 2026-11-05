@@ -5,3 +5,187 @@
     scroll-behavior: smooth;
   }
 }
+
+/* The vine: see vine.ts. Everything is the site's red, with deeper red leaves. */
+.nav-vine {
+  --vine-leaf: color-mix(in oklab, var(--accent) 72%, #000);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.nav-vine {
+  transition: opacity 200ms ease-out;
+}
+
+.nav-vine[data-hidden] {
+  opacity: 0;
+}
+
+.vine-stem {
+  fill: var(--accent);
+}
+
+/* On black the stem carries a soft halo: a wide stroke, which costs far less than a blur. */
+:root[data-theme="dark"] .vine-stem {
+  stroke: color-mix(in oklab, var(--accent) 28%, transparent);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.vine-tendril {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linejoin: round;
+}
+
+.vine-leaf {
+  fill: var(--vine-leaf);
+}
+
+.vine-tip {
+  fill: var(--accent);
+}
+
+.vine-stalk {
+  fill: none;
+  stroke: var(--vine-leaf);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.vine-closed {
+  fill: var(--vine-leaf);
+  opacity: 0;
+}
+
+.vine-petal {
+  fill: var(--accent);
+  transform: scale(0);
+}
+
+.vine-heart {
+  fill: var(--on-accent);
+  transform: scale(0);
+}
+
+.vine-sprout-leaf {
+  transform: scale(0);
+}
+
+/*
+ * A blossom sprouts in stages: the stalk reaches out, a closed bud swells on its
+ * tip, the petals unfold one after another, the heart shows, and the head nods
+ * under its new weight. vine.ts sets data-open as the growing tip passes.
+ */
+[data-open] > .vine-stalk {
+  animation: vine-stalk 420ms cubic-bezier(0.3, 0, 0.3, 1) both;
+}
+
+[data-open] .vine-closed {
+  animation: vine-closed 1300ms 300ms ease-out both;
+}
+
+[data-open] .vine-petal {
+  animation: vine-petal 720ms calc(780ms + var(--i) * 120ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-open] .vine-heart {
+  animation: vine-heart 420ms 1400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.vine-sprout[data-open] {
+  animation: vine-nod 1100ms 1050ms ease-out both;
+}
+
+/* A leaf starts folded along the stem, then swings out as it fills. */
+.vine-sprout-leaf[data-open] {
+  animation: vine-leaf 820ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vine-stalk {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes vine-closed {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  36% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+  52% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes vine-petal {
+  0% {
+    transform: rotate(-34deg) scale(0.18, 0.08);
+  }
+  60% {
+    transform: rotate(5deg) scale(1.06, 1.12);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes vine-heart {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes vine-nod {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: rotate(-7deg);
+  }
+  65% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes vine-leaf {
+  0% {
+    transform: rotate(calc(var(--side) * -52deg)) scale(0.05, 0.25);
+  }
+  65% {
+    transform: rotate(calc(var(--side) * 7deg)) scale(1.04, 0.92);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* Already grown, on a resize or with reduced motion: the finished state, no replay. */
+[data-grown] .vine-stalk {
+  stroke-dashoffset: 0;
+}
+
+[data-grown] .vine-petal,
+[data-grown] .vine-heart,
+.vine-sprout-leaf[data-grown] {
+  transform: none;
+}

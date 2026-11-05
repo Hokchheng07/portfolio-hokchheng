@@ -44,6 +44,10 @@ type Frame = {
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
+// Clip for a thread fill showing this share of its width. The vertical overflow
+// keeps the stroke on the crests and troughs. Matches achievements.css.
+const revealed = (share: number) => `inset(-8px ${((1 - share) * 100).toFixed(3)}% -8px 0)`;
+
 // Same curve as STANDARD, for the settle that steps window scroll by hand.
 function easeStandard(t: number) {
   const [x1, y1, x2, y2] = [0.22, 1, 0.36, 1];
@@ -172,7 +176,6 @@ export function bindGallery(root: HTMLElement) {
     let shown = -1;
     let chase = 0;
     let chaseTime = 0;
-    let nodeCentre = 0;
     let lastY = window.scrollY;
     let direction = 0;
     let idle = 0;
@@ -197,7 +200,7 @@ export function bindGallery(root: HTMLElement) {
       const vw = window.innerWidth;
       track.style.transform = `translate3d(${(-shown * vw).toFixed(2)}px, 0, 0)`;
       // The fill's end stays on the centred frame's node as the track moves.
-      fill.style.transform = `scaleX(${((nodeCentre + shown * vw) / (frames.length * vw)).toFixed(5)})`;
+      fill.style.clipPath = revealed(shown / last);
       paintFrames(shown, ARRIVED);
 
       // Stamp once the arriving photo is fully on screen, so the first and last
@@ -216,8 +219,6 @@ export function bindGallery(root: HTMLElement) {
 
     // Layout changed: re-measure and jump straight to the right place.
     function measure() {
-      const first = frames[0].node;
-      nodeCentre = first.offsetLeft + first.offsetWidth / 2;
       update();
       shown = position;
     }
@@ -321,7 +322,7 @@ export function bindGallery(root: HTMLElement) {
     function update() {
       const position = scroller.scrollLeft / (items[1].offsetLeft - items[0].offsetLeft);
       frames.forEach(({ fill }, index) => {
-        fill.style.transform = `scaleX(${clamp(position - index + 0.5, 0, 1).toFixed(4)})`;
+        fill.style.clipPath = revealed(clamp(position - index + 0.5, 0, 1));
       });
       paintFrames(position, ARRIVED);
       const index = Math.round(position);
