@@ -44,12 +44,12 @@ export function Navbar() {
           aria-label="Main"
           className="relative rounded-[2.75rem] border border-foreground/[0.06] bg-surface/80 shadow-[0_12px_40px_-16px_rgba(0,0,0,0.18)] backdrop-blur-xl"
         >
-          <div ref={bar} className="grid h-[72px] grid-cols-[1fr_auto] items-center px-6 sm:h-[88px] sm:px-10 xl:grid-cols-[1fr_auto_1fr]">
+          <div ref={bar} className="grid h-[72px] grid-cols-[1fr_auto] items-center px-6 sm:px-10 xl:grid-cols-[1fr_auto_1fr]">
             <Link
               ref={name}
               href="/#home"
               onClick={(event) => goTo(event, navLinks[0])}
-              className="justify-self-start font-display text-2xl font-bold uppercase tracking-[-0.01em] sm:text-[28px]"
+              className="justify-self-start font-display text-2xl font-bold uppercase tracking-[-0.01em]"
             >
               {site.name}
             </Link>
@@ -130,7 +130,7 @@ function NavLink({
   block?: boolean;
   onNavigate?: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
-  const className = `relative text-[19px] tracking-wide transition-colors duration-200 ${block ? "block py-2.5 text-xl" : ""} ${
+  const className = `relative text-[17px] tracking-wide transition-colors duration-200 ${block ? "block py-2.5 text-xl" : ""} ${
     active ? "text-foreground" : "text-muted hover:text-foreground"
   }`;
 

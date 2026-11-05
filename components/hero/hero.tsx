@@ -23,12 +23,12 @@ const NIGHT = {
 
 export function Hero() {
   return (
-    <section id="home" style={NIGHT} className="orbit-hero relative flex min-h-svh flex-col overflow-hidden text-foreground lg:min-h-[max(100svh,54rem)]">
+    <section id="home" style={NIGHT} className="orbit-hero relative flex min-h-svh flex-col overflow-hidden text-foreground lg:min-h-[max(100svh,44rem)]">
       <KageBackdrop />
       <OrbitRings />
 
       {/* On lg+ the content keeps --ring-clear free on both sides for the rings. */}
-      <div className="relative mx-auto grid w-full max-w-3xl flex-1 items-center gap-14 px-6 pb-28 pt-32 sm:px-10 lg:w-[min(100%-2*var(--ring-clear),76rem)] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,21rem)] lg:gap-10 lg:px-0 lg:pt-28 xl:grid-cols-[minmax(26rem,1fr)_minmax(0,540px)] xl:gap-12">
+      <div className="relative mx-auto grid w-full max-w-3xl flex-1 items-center gap-14 px-6 pb-28 pt-32 sm:px-10 lg:w-[min(100%-2*var(--ring-clear),68rem)] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,21rem)] lg:gap-10 lg:px-0 lg:pt-28 xl:grid-cols-[minmax(26rem,1fr)_minmax(0,460px)] xl:gap-12">
         <div>
           <div className="rise" style={delay(0)}>
             <SocialLinks />
@@ -42,7 +42,7 @@ export function Hero() {
           </p>
 
           <h1
-            className="rise mt-5 font-display text-[clamp(3rem,5.4vw,5.75rem)] leading-[1.02] tracking-[0.01em]"
+            className="rise mt-5 font-display text-[clamp(3rem,5vw,5rem)] leading-[1.02] tracking-[0.01em]"
             style={delay(160)}
           >
             Hi, I&rsquo;m <em className="italic lg:block">{site.name}.</em>
